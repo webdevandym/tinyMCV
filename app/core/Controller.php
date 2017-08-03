@@ -1,9 +1,10 @@
 <?php
-namespace core;
+namespace app\core;
 
 /**
  * Main Class Controller;
  */
+
 class Controller
 {
     public $model;

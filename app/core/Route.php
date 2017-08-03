@@ -4,6 +4,9 @@ namespace app\core;
 class Route
 {
     protected static $host;
+    private static $controllerPath = 'app/Controllers/';
+    private static $controllerNameSpace = '\\app\\Controllers\\';
+    private static $modelPath = 'app/Models/';
 
     public static function start()
     {
@@ -14,13 +17,14 @@ class Route
         $routes = explode('/', $_SERVER['REQUEST_URI']);
 
         //get name of controller
-        if (!empty($routes[$detectPath-2])) {
-            $controllerName = $routes[1];
+
+        if (!empty($routes[$detectPath-4])) {
+            $controllerName = $routes[$detectPath-4];
         }
 
         //get name of action
-        if (!empty($route[$detectPath-1])) {
-            $actionName = $route[2];
+        if (!empty($route[$detectPath-3])) {
+            $actionName = $route[$detectPath-3];
         }
 
         //add prefix
@@ -28,23 +32,24 @@ class Route
         $controllerName = 'Controller'.ucfirst(strtolower($controllerName));
         $actionName = 'action'.ucfirst(strtolower($actionName));
 
-        $model_path = 'app/Models/' . $modelName . '.php';
+        $model_path = static::$modelPath . $modelName . '.php';
         if (file_exists($model_path)) {
             include $model_path;
         }
 
-        $controller_path = 'app/Controllers/' . $controllerName . '.php';
+        $controller_path = static::$controllerPath . $controllerName . '.php';
         if (file_exists($controller_path)) {
             include $controller_path;
         } else {
             Route::ErrorPage404();
         }
 
-        $controller = new $controllerName;
+        $fullControlerNamePath = static::$controllerNameSpace .$controllerName;
+        $controller = new $fullControlerNamePath;
         $action = $actionName;
 
         if (method_exists($controller, $action)) {
-            $controller->$action;
+            $controller->$action();
         } else {
             Route::ErrorPage404();
         }
