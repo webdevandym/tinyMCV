@@ -15,20 +15,21 @@ class Route
         $actionName = 'index';
 
         $url = new \app\Helper\Http\UrlHelper();
+
         static::$host = $url->url();
 
-        $detectPath = substr_count(static::$host, '/');
+        $detectPath = (substr_count(static::$host, '/') > 3) ? 2 : 1;
         $routes = explode('/', $_SERVER['REQUEST_URI']);
 
         //get name of controller
 
-        if (!empty($routes[$detectPath - 4])) {
-            $controllerName = $routes[$detectPath - 4];
+        if (!empty($routes[$detectPath])) {
+            $controllerName = $routes[$detectPath];
         }
 
         //get name of action
-        if (!empty($route[$detectPath - 3])) {
-            $actionName = $route[$detectPath - 3];
+        if (!empty($route[$detectPath + 1])) {
+            $actionName = $route[$detectPath + 1];
         }
 
         //add prefix

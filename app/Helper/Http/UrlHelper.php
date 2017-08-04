@@ -8,7 +8,7 @@ class UrlHelper
 
     public function __construct()
     {
-        $this->url = 'http://'.preg_replace("/\/\w+\.php/", '', $_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']).'/';
+        $this->url = 'http://'.$_SERVER['HTTP_HOST'].$this->getSubFold().'/';
     }
 
     public function assets($file, $return = false)
@@ -35,5 +35,12 @@ class UrlHelper
     private function collLink($link)
     {
         return preg_replace('/\./', '/', $link, substr_count($link, '.') - 1);
+    }
+
+    private function getSubFold()
+    {
+        preg_match('/(\/\w+)\//', $_SERVER['SCRIPT_NAME'], $match);
+
+        return $match[1];
     }
 }

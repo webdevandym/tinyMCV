@@ -1,10 +1,10 @@
 <?php
+
 namespace app\core;
 
 /**
- * Main Class Controller;
+ * Main Class Controller;.
  */
-
 class Controller
 {
     public $model;
