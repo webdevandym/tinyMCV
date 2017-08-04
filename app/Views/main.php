@@ -1,5 +1,24 @@
-<h1>Добро пожаловать!</h1>
-<p>
-<img src="http://www.imgworlds.com/wp-content/uploads/2015/12/18-CONTACTUS-HEADER.jpg" align="left" width="400" height="200">
-<a href="/">ОЛОЛОША TEAM</a> - команда первоклассных специалистов в области разработки веб-сайтов с многолетним опытом коллекционирования мексиканских масок, бронзовых и каменных статуй из Индии и Цейлона, барельефов и изваяний, созданных мастерами Экваториальной Африки пять-шесть веков назад...
-</p>
+<div id='dbstatus' class='dbsucc'>
+  <i class="fa fa-database" aria-hidden="true"></i>
+</div>
+<div class='loginFrame'>
+  <div class='main'>
+
+    <canvas id='logo' height='100' width='400'></canvas>
+    <h3 id='fistPageText'>Enter domain username</h3>
+    <!-- <form method = 'post' action = 'index'> -->
+    <span id='errorHolder'></span>
+    <span class='fieldname'> Username </span>
+    <input class='loginInput' type='text' maxlength="16" name='user' value="<?php echo $data->user; ?>">
+    <span id="loginChecker"></span>
+    <br>
+    <!-- <span class = 'fieldname'> Password </span>
+                    <input class = 'loginInput' type="text" name="pass" maxlength="16" value="$pass">
+                    <br> -->
+    <button class='submitLogin'>Log in</button>
+    <!-- </form> -->
+    <br>
+  </div>
+</div>
+
+<?php echo $data->page; ?>

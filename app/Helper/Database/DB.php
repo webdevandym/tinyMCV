@@ -2,9 +2,9 @@
 
 namespace app\Helpre\Database;
 
-use  app\core\Logger\colorSyntax;
-use app\core\Logger\logHTMLAdv;
-use app\Helper\Database\Connector;
+use  app\Helper\Database\Connector;
+use app\Helper\Logger\colorSyntax;
+use app\Helper\Logger\logHTMLAdv;
 use Exception as Exception;
 
 class DB extends Connector
