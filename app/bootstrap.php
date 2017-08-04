@@ -2,7 +2,6 @@
 
 namespace core;
 
-define('__ROOT__', __DIR__.'/../');
 // require_once 'core/Model.php';
 // require_once 'core/View.php';
 // require_once 'core/Controller.php';

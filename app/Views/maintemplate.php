@@ -20,8 +20,8 @@
   <script>
     window.jQuery || document.write('<script src="/../assets/js/vendor/jquery-3.2.1.min.js"><\/script>')
   </script>
-  <link rel="stylesheet" type="text/css" href="$url->assets('css.mincss.siteStyle-min.css'); ">
-  <script src="<?php $url->assets('js.min.firstPageScripts-min.css'); ?>"></script>
+
+  <script src="<?php $url->assets('js.min.firstpagescripts.js'); ?>"></script>
   <!-- <script src = "$curPath/assets/js/min/firstPageScripts.js"></script> -->
 </body>
 

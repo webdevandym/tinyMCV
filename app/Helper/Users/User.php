@@ -39,4 +39,8 @@ class User
             session_start();
         }
     }
+
+    public static function destroySESSION()
+    {
+    }
 }

@@ -13,8 +13,10 @@ class Route
     {
         $controllerName = 'Main';
         $actionName = 'index';
+
         $url = new \app\Helper\Http\UrlHelper();
         static::$host = $url->url();
+
         $detectPath = substr_count(static::$host, '/');
         $routes = explode('/', $_SERVER['REQUEST_URI']);
 
@@ -34,19 +36,24 @@ class Route
         $controllerName = 'Controller'.ucfirst(strtolower($controllerName));
         $actionName = 'action'.ucfirst(strtolower($actionName));
 
-        $model_path = static::$modelPath.$modelName.'.php';
-        if (file_exists($model_path)) {
-            include $model_path;
-        }
+        // $model_path = static::$modelPath.$modelName.'.php';
+        // if (file_exists($model_path)) {
+        //     include $model_path;
+        // }
+        //
+        // $controller_path = static::$controllerPath.$controllerName.'.php';
+        // if (!class_exists($controller_path)) {
+        //     include $controller_path;
+        // } else {
+        //     self::ErrorPage404();
+        // }
 
-        $controller_path = static::$controllerPath.$controllerName.'.php';
-        if (file_exists($controller_path)) {
-            include $controller_path;
-        } else {
+        $fullControlerNamePath = static::$controllerNameSpace.$controllerName;
+
+        if (!class_exists($fullControlerNamePath)) {
             self::ErrorPage404();
         }
 
-        $fullControlerNamePath = static::$controllerNameSpace.$controllerName;
         $controller = new $fullControlerNamePath();
         $action = $actionName;
 
