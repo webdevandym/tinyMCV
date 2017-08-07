@@ -17,9 +17,9 @@ class Route
         $url = new \app\Helper\Http\UrlHelper();
 
         static::$host = $url->url();
-
+        $requet = str_replace('/'.$url->getSubFold(), '', $_SERVER['REQUEST_URI']);
         $detectPath = (substr_count(static::$host, '/') > 3) ? 2 : 1;
-        $routes = explode('/', $_SERVER['REQUEST_URI']);
+        $routes = explode('/', $requet);
 
         //get name of controller
 
@@ -28,8 +28,8 @@ class Route
         }
 
         //get name of action
-        if (!empty($route[$detectPath + 1])) {
-            $actionName = $route[$detectPath + 1];
+        if (!empty($routes[$detectPath + 1])) {
+            $actionName = explode('?', $routes[$detectPath + 1])[0];
         }
 
         //add prefix

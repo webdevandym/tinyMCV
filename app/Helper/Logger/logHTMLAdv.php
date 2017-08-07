@@ -2,13 +2,11 @@
 
 namespace app\Helper\Logger;
 
-use  app\Helper\Logger\logger;
-
 class logHTMLAdv extends logger
 {
     public function writeLog()
     {
-        $str = '<div>'.'['.$_SERVER['REMOTE_ADDR'].' => '.$_COOKIE['user'].'] <b>'.date('Y-m-d H:i:s\: ', time()).'</b>'.$this->returnRunerFunc().'<br>'.preg_replace('/[ \\t]+/', ' ', $this->context).'<hr><br></div>';
+        $str = '<div>'.'['.$_SERVER['REMOTE_ADDR'].' => '.(isset($_COOKIE['user']) ? $_COOKIE['user'] : 'Guest').'] <b>'.date('Y-m-d H:i:s\: ', time()).'</b>'.$this->returnRunerFunc().'<br>'.preg_replace('/[ \\t]+/', ' ', $this->context).'<hr><br></div>';
 
         if ($f = $this->checkfile()) {
             if ($this->way) {

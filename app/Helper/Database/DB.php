@@ -1,8 +1,7 @@
 <?php
 
-namespace app\Helpre\Database;
+namespace app\Helper\Database;
 
-use  app\Helper\Database\Connector;
 use app\Helper\Logger\colorSyntax;
 use app\Helper\Logger\logHTMLAdv;
 use Exception as Exception;
@@ -76,7 +75,7 @@ class DB extends Connector
         $this->db = null;
     }
 
-    public function sanitizeString($var)
+    public function clrStr($var)
     {
         if (!is_object($var)) {
             if (!empty($this->db)) {

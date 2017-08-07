@@ -24,11 +24,30 @@ let paintCanvas = function() {
     context.drawImage(image, 310, 0)
   }
 }
+//TODO: replace function to object prototype;
+
+function objtojson(obj) {
+  return $.parseJSON(JSON.stringify(obj))
+}
 
 $('.loginInput').on('blur', function() {
-  $.get('./core/loginControler/loginChecker.php?q=' + encodeURIComponent($('.loginInput').val()), function(data) {
-    $('#loginChecker').html(data)
+
+  $.ajax({
+    type: "POST",
+    url: "Uservalid/Validate",
+    // dataType: "JSON",
+    data: objtojson({
+      user: encodeURIComponent($('.loginInput').val())
+    }),
+    error: function(xhr, b, c) {
+      console.log("xhr=" + xhr + " b=" + b + " c=" + c);
+    }
+  }).done(function(data) {
+    console.log(data, 1);
   })
+  // $.get('?user=' +, function(data) {
+  //   $('#loginChecker').html(data)
+  // })
 })
 
 $(".loginInput").keypress(function(event) {

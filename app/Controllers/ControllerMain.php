@@ -17,7 +17,6 @@ class ControllerMain extends Controller
     public function actionIndex()
     {
         $data = $this->model->get_data();
-
         $this->{$data->page}($data);
     }
 

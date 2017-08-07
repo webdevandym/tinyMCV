@@ -18,4 +18,23 @@ class Controller
     public function actionIndex()
     {
     }
+
+    public function getParams()
+    {
+        $params = new \StdClass();
+
+        if (isset($_POST)) {
+            $store = $_POST;
+        } elseif (isset($_GET)) {
+            $store = $_GET;
+        } else {
+            $store = ['11' => '12'];
+        }
+
+        foreach ($store as $key => $value) {
+            $params->$key = $value;
+        }
+
+        return $store;
+    }
 }

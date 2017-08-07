@@ -2,35 +2,34 @@
 
 namespace app\Helper\Database;
 
-use app\core\Helper\crypt;
+use app\Helper\crypt;
 
-abstract class Connector
+class Connector
 {
-    private static $instance = null;
-    private $db = null;
+    protected static $instance = null;
+    protected $db = null;
 
     public static function getInst()
     {
-        if (self::$instance === null) {
-            self::$instance = new self();
+        if (static::$instance === null) {
+            static::$instance = new static();
         }
 
-        return self::$instance;
+        return static::$instance;
     }
 
-    abstract public function getPDO()
+    public function getPDO()
     {
     }
 
-    protected function conn()
+    public function conn()
     {
         if (empty($this->db)) {
-            $file = __DIR__.'/config.xml';
+            $file = __ROOT__.'/config.xml';
 
             $xml = simplexml_load_file($file);
             $pass = (string) $xml->dbpass->item;
 
-            require_once __DIR__.'./../core/openssl_encrypt_decrypt.php';
             $crypt = new crypt($xml->cryptKey, $xml->secret_iv);
 
             if (!$crypt->validMd5($pass)) {
@@ -44,13 +43,15 @@ abstract class Connector
 
             $this->db = $this->getConnection($xml->dbhost->item, $xml->dbname->item, $xml->dbuser->item, $pass);
         }
+
+        return static::$instance;
     }
 
     protected function getConnection($server, $database, $user, $pass)
     {
         try {
             if (!($this->db instanceof \PDO)) {
-                $dns = sprintf("dblib:host={$this::$server};dbname={$this::$database};ConnectionPooling=0;LoginTimeout=5");
+                $dns = sprintf("dblib:host={$server};dbname={$database};ConnectionPooling=0;LoginTimeout=5");
                 $db = new \PDO(
                   $dns,
                   $user,
@@ -71,7 +72,7 @@ abstract class Connector
 
     protected function checkConnect($db)
     {
-        if (!empty($db)) {
+        if (empty($db)) {
             echo <<<__END
     <head>
          <link rel="stylesheet" type="text/css" href="{$_COOKIE['curPath']}/../assets/css/mincss/siteStyle-min.css">

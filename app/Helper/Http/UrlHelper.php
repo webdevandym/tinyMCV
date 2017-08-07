@@ -2,6 +2,9 @@
 
 namespace app\Helper\Http;
 
+/* Class UrlHelper
+Help to include files, link Assets etc. */
+
 class UrlHelper
 {
     protected $url;
@@ -13,7 +16,7 @@ class UrlHelper
 
     public function assets($file, $return = false)
     {
-        $file = $this->url.'assets/'.$this->collLink($file);
+        $file = $this->url.'assets/'.$this->coolLink($file);
 
         if (!$return) {
             echo $file;
@@ -29,18 +32,19 @@ class UrlHelper
 
     public function incView($name)
     {
-        return  __ROOT__.'/app/Views/'.$this->collLink($name);
+        // __ROOT__ defined in index.php
+        return  __ROOT__.'/app/Views/'.$this->coolLink($name);
     }
 
-    private function collLink($link)
-    {
-        return preg_replace('/\./', '/', $link, substr_count($link, '.') - 1);
-    }
-
-    private function getSubFold()
+    public function getSubFold()
     {
         preg_match('/(\/\w+)\//', $_SERVER['SCRIPT_NAME'], $match);
 
-        return $match[1];
+        return $match[1] ? $match[1] : '';
+    }
+
+    private function coolLink($link)
+    {
+        return preg_replace('/\./', '/', $link, substr_count($link, '.') - 1);
     }
 }
