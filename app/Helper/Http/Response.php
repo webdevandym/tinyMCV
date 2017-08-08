@@ -1,8 +1,8 @@
 <?php
 
-namespace app\Helper;
+namespace app\Helper\Http;
 
-class responce
+class Response
 {
     public static function json($data)
     {

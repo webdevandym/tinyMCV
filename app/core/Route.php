@@ -2,6 +2,8 @@
 
 namespace app\core;
 
+use app\Helper\Http\Request;
+
 class Route
 {
     protected static $host;
@@ -37,18 +39,6 @@ class Route
         $controllerName = 'Controller'.ucfirst(strtolower($controllerName));
         $actionName = 'action'.ucfirst(strtolower($actionName));
 
-        // $model_path = static::$modelPath.$modelName.'.php';
-        // if (file_exists($model_path)) {
-        //     include $model_path;
-        // }
-        //
-        // $controller_path = static::$controllerPath.$controllerName.'.php';
-        // if (!class_exists($controller_path)) {
-        //     include $controller_path;
-        // } else {
-        //     self::ErrorPage404();
-        // }
-
         $fullControlerNamePath = static::$controllerNameSpace.$controllerName;
 
         if (!class_exists($fullControlerNamePath)) {
@@ -59,13 +49,9 @@ class Route
         $action = $actionName;
 
         if (method_exists($controller, $action)) {
-            $result = $controller->$action();
+            $result = $controller->$action(new Request());
         } else {
             self::ErrorPage404();
-        }
-
-        if (!empty($result)) {
-            return $result;
         }
     }
 

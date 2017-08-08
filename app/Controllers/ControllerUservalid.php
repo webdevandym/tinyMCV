@@ -3,6 +3,8 @@
 namespace app\Controllers;
 
 use app\core\Controller;
+use app\Helper\Http\Request;
+use app\Helper\Http\Response;
 use app\Models\ModelUservalid;
 
 class ControllerUservalid extends Controller
@@ -12,11 +14,10 @@ class ControllerUservalid extends Controller
         $this->model = new ModelUservalid();
     }
 
-    public function actionValidate()
+    public function actionValidate(Request $request)
     {
-        // $result = new \StdClass();
-        // $result = $this->model->get_data($this->getParams());
-        $p = $this->getParams();
-        print_r($p);
+        $result = $this->model->get_data($request);
+
+        return Response::json($result);
     }
 }

@@ -26,28 +26,61 @@ let paintCanvas = function() {
 }
 //TODO: replace function to object prototype;
 
-function objtojson(obj) {
-  return $.parseJSON(JSON.stringify(obj))
+
+function requireDATA() {
+  this.stat = $.Deferred()
 }
 
-$('.loginInput').on('blur', function() {
+requireDATA.prototype = {
+  runQuery: function(url, obj, f) {
 
-  $.ajax({
-    type: "POST",
-    url: "Uservalid/Validate",
-    // dataType: "JSON",
-    data: objtojson({
-      user: encodeURIComponent($('.loginInput').val())
-    }),
-    error: function(xhr, b, c) {
-      console.log("xhr=" + xhr + " b=" + b + " c=" + c);
+    let json = $.parseJSON(JSON.stringify(obj));
+    console.log(json);
+    $.ajax({
+      type: "POST",
+      url: url,
+      dataType: "JSON",
+      data: json,
+      error: function(xhr, b, c) {
+        console.log("xhr=" + xhr + " b=" + b + " c=" + c);
+      },
+      success: (data) => {
+        if (typeof f == 'function') {
+          f(this.IsJsonString(data) ? JSON.parse(data) : data);
+        }
+        this.stat.resolve('and')
+      }
+    })
+
+    return this;
+  },
+
+
+  done: function(f) {
+    this.stat.promise().done(() => {
+      f();
+      return this;
+    })
+  },
+
+  IsJsonString(str) {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
     }
-  }).done(function(data) {
-    console.log(data, 1);
-  })
-  // $.get('?user=' +, function(data) {
-  //   $('#loginChecker').html(data)
-  // })
+    return true;
+  }
+}
+let request = new requireDATA();
+
+$('.loginInput').on('blur', function() {
+  request.runQuery("Uservalid/Validate", {
+      user: encodeURIComponent($('.loginInput').val())
+    },
+    function(data) {
+      $('#loginChecker').html(data)
+    });
 })
 
 $(".loginInput").keypress(function(event) {
@@ -68,19 +101,26 @@ function checkAndLogin() {
 
   if ((login = encodeURIComponent($('.loginInput').val())) != '') {
 
-    $.ajax({
-      method: 'GET',
-      url: './core/loginControler/loginChecker.php?q=' + login + '&sendResult=true',
-      success: (data) => {
-        if (data != '') {
-          $.get('index.php?user=' + login, function(data) {
-            $('body').html(data)
-          })
+    request.runQuery("Uservalid/Validate", {
+        user: encodeURIComponent($('.loginInput').val()),
+        sendResult: true
+      },
+      function(data) {
+        console.log(data);
+        if (data != false) {
+          location.reload();
         } else {
           $('#errorHolder').html("<span class = 'error'>Please check your domain username</span>")
         }
-      }
-    })
+      });
+
+    // $.ajax({
+    //   method: 'GET',
+    //   url: './core/loginControler/loginChecker.php?q=' + login + '&sendResult=true',
+    //   success: (data) => {
+    //
+    //   }
+    // })
 
   } else $('#errorHolder').html("<span class = 'error'>Please enter your domain username</span>");
 

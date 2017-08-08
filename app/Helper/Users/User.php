@@ -16,7 +16,7 @@ class User
         return $user;
     }
 
-    public static function ValidUser($user, $table = 'proj_users', $row = ['DISTINCT name', 'f_name'], $cond = "and disabled = '0'")
+    public static function ValidUser($user, $table = 'proj_users', $row = ['DISTINCT name ', 'f_name'], $cond = "and disabled = '0'")
     {
         $db = DB::getInst()->conn();
 
@@ -28,20 +28,27 @@ class User
         return is_object($res) ? $res : false;
     }
 
-    public static function setUser($svar, \StdClass $user)
+    public static function setUser($svar, $user)
     {
-        if (!isset($_SESSION) && isset($user)) {
-            $_SESSION[$svar[0]] = $user->{$svar[0]};
-            $_SESSION[$svar[1]] = $user->{$svar[1]};
+        self::checkSESSION();
+
+        if (!isset($_SESSION[$svar[0]]) && is_object($user)) {
+            $i = 0;
+            foreach ($user as $key => $value) {
+                $_SESSION[$svar[$i++]] = $value;
+            }
+
+            // $_SESSION[$svar[0]] = $user->{$svar[0]};
+            // $_SESSION[$svar[1]] = $user->{$svar[1]};
         }
 
-        if (!isset($_COOKIE)) {
+        if (!isset($_COOKIE[$svar[0]])) {
             setcookie($svar[0], $_SESSION[$svar[0]], time() + 60 * 60 * 24 * 7, '/');
             setcookie($svar[1], $_SESSION[$svar[1]], time() + 60 * 60 * 24 * 7, '/');
         }
     }
 
-    public static function getUser(\StdClass &$user, array $svar = ['user', 'userName'])
+    public static function getUser(&$user, array $svar = ['user', 'userName'])
     {
         if (empty($svar[0]) && empty($svar[1])) {
             throw new \Exception('Check input value in getUser func.!', 1);
@@ -56,7 +63,7 @@ class User
             $user->{$svar[0]} = $_SESSION[$svar[0]];
             $user->{$svar[1]} = $_SESSION[$svar[1]];
 
-            self::setUser($svar);
+            self::setUser($svar, $user);
         } else {
             $user->{$svar[0]} = $user->{$svar[1]} = '';
         }
