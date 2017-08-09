@@ -41,7 +41,7 @@ class Render
             include $phpFile;
             $content = ob_get_clean();
         } else {
-            $con = file_get_contents($phpFile);
+            $content = file_get_contents($phpFile);
         }
 
         file_put_contents($jsFile, str_replace(['  ', '\n', '\t', '\r'], '', json_encode($content)));

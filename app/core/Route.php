@@ -2,6 +2,7 @@
 
 namespace app\core;
 
+//return request from front-end
 use app\Helper\Http\Request;
 
 class Route
@@ -10,6 +11,7 @@ class Route
     private static $controllerPath = 'app/Controllers/';
     private static $controllerNameSpace = '\\app\\Controllers\\';
     private static $modelPath = 'app/Models/';
+    private static $enable404 = true;
 
     public static function start()
     {
@@ -42,23 +44,25 @@ class Route
         $fullControlerNamePath = static::$controllerNameSpace.$controllerName;
 
         if (!class_exists($fullControlerNamePath)) {
-            self::ErrorPage404();
+            return self::ErrorPage404();
         }
 
         $controller = new $fullControlerNamePath();
         $action = $actionName;
 
-        if (method_exists($controller, $action)) {
-            $controller->$action(new Request());
-        } else {
-            self::ErrorPage404();
+        if (!method_exists($controller, $action)) {
+            return self::ErrorPage404();
         }
+
+        $controller->$action(new Request());
     }
 
     public function ErrorPage404()
     {
-        header('HTTP/1.1 404 Not Found');
-        header('Status 404 Not Found');
-        header('Location'.static::$host.'404');
+        if (static::$enable404) {
+            header('HTTP/1.1 404 Not Found');
+            header('Status 404 Not Found');
+            header('Location: '.static::$host.'404/');
+        }
     }
 }

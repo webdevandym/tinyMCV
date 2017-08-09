@@ -18,7 +18,7 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script>
-    window.jQuery || document.write('<script src="/../assets/js/vendor/jquery-3.2.1.min.js"><\/script>')
+    window.jQuery || document.write('<script src="<?php $url->assets('js/vendor/jquery-3.2.1.min.js', false); ?>"><\/script>')
   </script>
 
   <script src="<?php $url->assets('js.min.firstpagescripts.js'); ?>"></script>

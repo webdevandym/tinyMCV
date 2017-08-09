@@ -14,9 +14,9 @@ class UrlHelper
         $this->url = 'http://'.$_SERVER['HTTP_HOST'].$this->getSubFold().'/';
     }
 
-    public function assets($file, $return = false)
+    public function assets($file, $conv = true, $return = false)
     {
-        $file = $this->url.'assets/'.$this->coolLink($file);
+        $file = $this->url.'assets/'.($conv ? $this->coolLink($file) : $file);
 
         if (!$return) {
             echo $file;
@@ -30,10 +30,10 @@ class UrlHelper
         return $this->url;
     }
 
-    public function incView($name)
+    public function incView($name, $conv = true)
     {
         // __ROOT__ defined in index.php
-        return  __ROOT__.'/app/Views/'.$this->coolLink($name);
+        return  __ROOT__.'/app/Views/'.($conv ? $this->coolLink($name) : $name);
     }
 
     public function getSubFold()
@@ -45,6 +45,8 @@ class UrlHelper
 
     private function coolLink($link)
     {
-        return preg_replace('/\./', '/', $link, substr_count($link, '.') - 1);
+        $position = strtolower(array_slice(explode('.', $link), -2, 1)[0]) === 'min' ? 2 : 1;
+
+        return preg_replace('/\./', '/', $link, substr_count($link, '.') - $position);
     }
 }

@@ -34,17 +34,15 @@ class User
 
         if (!isset($_SESSION[$svar[0]]) && is_object($user)) {
             $i = 0;
-            foreach ($user as $key => $value) {
+            foreach ($user as  $value) {
                 $_SESSION[$svar[$i++]] = $value;
             }
-
-            // $_SESSION[$svar[0]] = $user->{$svar[0]};
-            // $_SESSION[$svar[1]] = $user->{$svar[1]};
         }
 
         if (!isset($_COOKIE[$svar[0]])) {
-            setcookie($svar[0], $_SESSION[$svar[0]], time() + 60 * 60 * 24 * 7, '/');
-            setcookie($svar[1], $_SESSION[$svar[1]], time() + 60 * 60 * 24 * 7, '/');
+            foreach ($svar as  $value) {
+                setcookie($value, $_SESSION[$value], time() + 60 * 60 * 24 * 7, '/');
+            }
         }
     }
 
@@ -55,17 +53,21 @@ class User
         }
 
         if (isset($_COOKIE[$svar[0]])) {
-            $_SESSION[$svar[0]] = $_COOKIE[$svar[0]];
-            $_SESSION[$svar[1]] = $_COOKIE[$svar[1]];
+            foreach ($svar as $value) {
+                $_SESSION[$value] = $_COOKIE[$value];
+            }
         }
 
         if (isset($_SESSION[$svar[0]])) {
-            $user->{$svar[0]} = $_SESSION[$svar[0]];
-            $user->{$svar[1]} = $_SESSION[$svar[1]];
+            foreach ($svar as $value) {
+                $user->$value = $_SESSION[$value];
+            }
 
             self::setUser($svar, $user);
         } else {
-            $user->{$svar[0]} = $user->{$svar[1]} = '';
+            foreach ($svar as $value) {
+                $user->$value = '';
+            }
         }
     }
 
@@ -92,14 +94,7 @@ class User
     {
         self::checkSESSION();
 
-        if (isset($_SESSION['user']) || isset($_COOKIE['user'])) {
-            destroySession($excl);
-        }
-
-        echo "<script>window.location.href = '.';</script>";
-
-        function destroySession($excl = '')
-        {
+        $destroySession = function ($excl = '') {
             $exl_array[] = [];
 
             if (is_array($excl)) {
@@ -124,6 +119,12 @@ class User
                 }
             } catch (\Exception $e) {
                 echo $e->getMessage();
+            }
+        };
+
+        if ($_SESSION !== null || $_COOKIE !== null) {
+            if ($destroySession($excl)) {
+                echo "<script>window.location.href = '.';</script>";
             }
         }
     }

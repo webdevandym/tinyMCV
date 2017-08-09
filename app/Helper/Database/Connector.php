@@ -11,7 +11,7 @@ class Connector
 
     public static function getInst()
     {
-        if (static::$instance === null) {
+        if (null === static::$instance) {
             static::$instance = new static();
         }
 
@@ -73,9 +73,11 @@ class Connector
     protected function checkConnect($db)
     {
         if (empty($db)) {
+            $url = new \app\Helper\Http\UrlHelper();
+
             echo <<<__END
     <head>
-         <link rel="stylesheet" type="text/css" href="{$_COOKIE['curPath']}/../assets/css/mincss/siteStyle-min.css">
+         <link rel="stylesheet" type="text/css" href="$url->assets('css.mincss.siteStyle-min.css'); ?>">
          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
     </head>
     <body>

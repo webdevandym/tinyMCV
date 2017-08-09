@@ -11,7 +11,6 @@ class messStore
     protected static $inst;
     private static $lang = 'EN';
     private static $langUse = true;
-    private $keepConnect;
     private static $linkStore = '';
     private static $level;
     private static $file = __ROOT__.'/app/Store/messageStore';
@@ -67,14 +66,10 @@ class messStore
         if ($key) {
             if (is_array($key)) {
                 foreach ($key as  $value) {
-                    if (!empty($value)) {
-                        $res = $res->$value;
-                    }
+                    $res = $res->$value;
                 }
             } else {
-                if (!empty($key)) {
-                    $res = $res->{$key};
-                }
+                $res = $res->{$key};
             }
         }
 

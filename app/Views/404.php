@@ -80,7 +80,7 @@
 <div></div>
 
 			<canvas width="1280" height="894" style="width: 1280px; height: 894px;"></canvas>
-			<h1 class=" show">You shouldn't be here. Go to <a href="http://hakim.se">hakim.se</a></h1>
+			<h1 class=" show">You shouldn't be here. Go <a href="../">home</a></h1>
 		</div>
 
 		<script>
