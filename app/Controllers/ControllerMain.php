@@ -4,6 +4,8 @@ namespace app\Controllers;
 
 use app\core\Controller;
 use app\core\View;
+use app\Helper\Http\Request;
+use app\Helper\Http\Response;
 use app\Models\ModelMain;
 
 class ControllerMain extends Controller
@@ -14,11 +16,11 @@ class ControllerMain extends Controller
         $this->view = new View();
     }
 
-    public function actionIndex()
+    public function actionIndex(Request $request)
     {
         $data = $this->model->get_data();
 
-        $this->{$data->page}($data);
+        $this->{$data->page}($data, $request);
     }
 
     private function main(\stdClass $data)
@@ -26,8 +28,14 @@ class ControllerMain extends Controller
         $this->view->generate('main.php', 'maintemplate.php', $data);
     }
 
-    private function view(\stdClass $data)
+    private function view(\stdClass $data, $request)
     {
-        $this->view->generate('view.php', 'viewtemplate.php', $data);
+        if (!$request->statusRequest) {
+            $this->view->generate('view.php', 'viewtemplate.php', $data);
+        } else {
+            $page = $this->view->pageLoader($request->page);
+
+            return Response::json($page);
+        }
     }
 }

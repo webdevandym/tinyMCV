@@ -30,14 +30,15 @@ function putData(clb) {
       }
       jobQuery()
 
-      let data = new requireDATA
-      data.runQuery(paths.main, {
+      HttpRequest.runQuery(paths.main, {
           getUserName: {
             id: "programmerName"
           },
           getObjectType: {
             id: "objectType"
           }
+        }, function() {
+          getData4JSON();
         })
         .done(() => {
           getObjName(true, null, null, () => {
@@ -52,49 +53,28 @@ function putData(clb) {
     })
 }
 
-function requireDATA() {
-  this.stat = $.Deferred()
-}
 
-requireDATA.prototype = {
-  runQuery: function(paths, jsobj) {
+let getData4JSON = function(data) {
+  $.each(JSON.parse(data), (it, v) => {
 
-    $.get(paths + jsobj.parsetoJSON(), function(data) {
-      console.log(data);
-      $.each(JSON.parse(data), (it, v) => {
+    if (v.condition != undefined && !v.condition) return;
 
-        if (v.condition != undefined && !v.condition) return;
+    let selector = v.id != undefined ? '#' + v.id : '.' + v.class,
+      store = '';
 
-        let selector = v.id != undefined ? '#' + v.id : '.' + v.class,
-          store = '';
-
-        if (v.val instanceof Array) {
-          $.each(v.val, (item, val) => {
-            if (val != '') store += val;
-          })
-        }
-
-        store = store || v.val;
-
-        $(selector).html(store.replace(/^ | $/, ''))
-
+    if (v.val instanceof Array) {
+      $.each(v.val, (item, val) => {
+        if (val != '') store += val;
       })
+    }
 
-    }).done(() => {
-      this.stat.resolve('and')
-    })
+    store = store || v.val;
 
+    $(selector).html(store.replace(/^ | $/, ''))
 
-    return this;
-  },
-
-  done: function(f) {
-    this.stat.promise().done(() => {
-      f();
-      return this;
-    })
-  }
+  })
 }
+
 
 Object.prototype.getPjName = function(name, editor) {
   let path = "./web/forms",

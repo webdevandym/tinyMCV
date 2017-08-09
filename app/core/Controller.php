@@ -2,6 +2,8 @@
 
 namespace app\core;
 
+use app\Helper\Http\Request;
+
 /**
  * Main Class Controller;.
  */
@@ -15,7 +17,7 @@ class Controller
         $this->view = new View();
     }
 
-    public function actionIndex()
+    public function actionIndex(Request $request)
     {
     }
 }

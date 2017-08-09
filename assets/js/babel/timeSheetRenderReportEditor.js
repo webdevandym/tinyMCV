@@ -67,8 +67,8 @@ function insertData(object) {
   }.parsetoJSON(), function (data) {
     $('#editModal select#customer').html(data);
   }).done(function () {
-    var data = new requireDATA(),
-        storeobj = {
+
+    storeobj = {
       getProject: {
         id: "name",
         obj: {
@@ -84,7 +84,7 @@ function insertData(object) {
       }
     };
 
-    data.runQuery(paths.main, storeobj);
+    // HttpRequest.runQuery(paths.main, storeobj)
 
     //  $('select#userName').html($(''));
 

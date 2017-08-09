@@ -15,19 +15,21 @@ var getCookie = (name) => {
       $("meta[name='curentPage']").attr('value', page || 'timeSheet')
     }
 
-    $.get('web/render.php?q=' + page, function(data) {
-      $('.inputHere').html(data)
-
-    }).done(function() {
-
-      putData(() => {
-        timeSheetRunEvent(page)
+    HttpRequest.runQuery('.', {
+        page: page || null
+      }, (data) => {
+        $('.inputHere').html(data)
       })
+      .done(function() {
 
-      $('#programmerName').change(function() {
-        getCurentReport($(this).val(), 'getCalendar')
-      })
-    });
+        // putData(() => {
+        //   timeSheetRunEvent(page)
+        // })
+        //
+        // $('#programmerName').change(function() {
+        //   getCurentReport($(this).val(), 'getCalendar')
+        // })
+      });
   },
 
   refrSwitch = () => {

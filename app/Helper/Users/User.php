@@ -71,7 +71,19 @@ class User
 
     public static function checkSESSION()
     {
-        if (!isset($_SESSION)) {
+        $is_session_started = function () {
+            if (PHP_SAPI !== 'cli') {
+                if (version_compare(PHP_VERSION, '7.0', '>=')) {
+                    return session_status() === PHP_SESSION_ACTIVE ? true : false;
+                }
+
+                return session_id() === '' ? false : true;
+            }
+
+            return false;
+        };
+
+        if (!$is_session_started()) {
             session_start();
         }
     }

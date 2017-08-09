@@ -13,17 +13,24 @@ class Request
                 $this->{$key} = $this->clearString($value);
             }
         }
+
+        if (!empty($data)) {
+            $this->statusRequest = 1;
+        } else {
+            $this->statusRequest = 0;
+        }
     }
 
     private function loadRequest()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        switch ($_SERVER['REQUEST_METHOD']) {
+          case 'POST':
             return $_POST;
-        } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+          case 'GET':
             return $_GET;
+          default:
+            return null;
         }
-
-        return null;
     }
 
     private function clearString($str)

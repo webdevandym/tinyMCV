@@ -18,17 +18,19 @@ renderWeb = function renderWeb(page, refresh) {
     $("meta[name='curentPage']").attr('value', page || 'timeSheet');
   }
 
-  $.get('web/render.php?q=' + page, function (data) {
+  HttpRequest.runQuery('.', {
+    page: page || null
+  }, function (data) {
     $('.inputHere').html(data);
   }).done(function () {
 
-    putData(function () {
-      timeSheetRunEvent(page);
-    });
-
-    $('#programmerName').change(function () {
-      getCurentReport($(this).val(), 'getCalendar');
-    });
+    // putData(() => {
+    //   timeSheetRunEvent(page)
+    // })
+    //
+    // $('#programmerName').change(function() {
+    //   getCurentReport($(this).val(), 'getCalendar')
+    // })
   });
 },
     refrSwitch = function refrSwitch() {

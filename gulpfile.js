@@ -128,7 +128,7 @@ gulp.task('compressJS', ['concatJS'], function(cb) {
 
 gulp.task('concatJS', ['babel'], () => {
 
-  return gulp.src(['assets/js/setupParam.js', 'assets/js/moments.js', paths.jsBabel + '*.js', '!' + paths.jsBabel + 'firstpagescripts.js'])
+  return gulp.src(['assets/js/babel/setupParam.js', 'assets/js/moments.js', paths.jsBabel + '*.js', '!' + paths.jsBabel + 'firstpagescripts.js'])
     .pipe(concat('siteJS-min.js'))
     .pipe(gulp.dest(paths.jsminconc));
 });
@@ -140,7 +140,8 @@ gulp.task('babel', ['deleteJSmin'], () => {
     .pipe(babel({
       presets: ['es2015']
     }))
-    .pipe(gulp.dest(paths.jsBabel));
+    .pipe(gulp.dest(paths.jsBabel))
+    .pipe(wait(150));
 });
 
 gulp.task('deleteJSmin', () => {

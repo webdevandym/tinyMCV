@@ -7,7 +7,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="<?php echo $basePath; ?>web/content" id= "brand">
+        <a class="navbar-brand" href="/" id= "brand">
             QTT Panel <i class="fa fa-database" aria-hidden="true"></i>
         </a>
         <canvas height="50" width="450" id = 'time'></canvas>
@@ -19,7 +19,7 @@
             <li class = 'menuBorder' ></li>
             <li><a href="timeSheet" onclick="renderWeb($(this).attr('href'));"><i class="fa fa-clock-o"></i> Time Sheet</a></li>
             <li><a href="content" onclick="renderWeb($(this).attr('href'));"><i class="fa fa-users"></i> Tracker</a></li>
-            <li><a href="#" onclick="$.get('<?php echo $basePath; ?>core/loginControler/logout.php',(data) =>{$('body').html(data)})"><i class="fa fa-external-link"></i> Log out</a></li>
+            <!-- <li><a href="#" onclick="$.get('<?php //echo $basePath;?>core/loginControler/logout.php',(data) =>{$('body').html(data)})"><i class="fa fa-external-link"></i> Log out</a></li> -->
 
         </ul>
 

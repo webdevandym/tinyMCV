@@ -28,8 +28,6 @@ var paintCanvas = function paintCanvas() {
     context.drawImage(image, 310, 0);
   };
 };
-//TODO: replace function to object prototype;
-
 
 function requireDATA() {
   this.stat = $.Deferred();
@@ -40,7 +38,7 @@ requireDATA.prototype = {
     var _this = this;
 
     var json = $.parseJSON(JSON.stringify(obj));
-    console.log(json);
+
     $.ajax({
       type: "POST",
       url: url,
@@ -78,6 +76,7 @@ requireDATA.prototype = {
     return true;
   }
 };
+
 var request = new requireDATA();
 
 $('.loginInput').on('blur', function () {
@@ -115,14 +114,6 @@ function checkAndLogin() {
         $('#errorHolder').html("<span class = 'error'>Please check your domain username</span>");
       }
     });
-
-    // $.ajax({
-    //   method: 'GET',
-    //   url: './core/loginControler/loginChecker.php?q=' + login + '&sendResult=true',
-    //   success: (data) => {
-    //
-    //   }
-    // })
   } else $('#errorHolder').html("<span class = 'error'>Please enter your domain username</span>");
 }
 

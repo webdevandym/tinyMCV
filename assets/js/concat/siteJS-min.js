@@ -1,23 +1,153 @@
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var paths = {
-    main: './app/Controllers/mainInfoLoader.php?method=',
-    reportEditor: './app/Controllers/reportEditeTools.php?method='
-  },
-  firstRun = true;
+  main: './app/Controllers/mainInfoLoader.php?method=',
+  reportEditor: './app/Controllers/reportEditeTools.php?method='
+},
+    firstRun = true;
 
-Object.prototype.parsetoJSON = function() {
-  if (typeof this == 'object') {
+Object.prototype.parsetoJSON = function () {
+  if (_typeof(this) == 'object') {
     return JSON.stringify(this);
   } else throw 'This val is not Object!';
-
-}
+};
 
 Object.defineProperty(Object.prototype, 'parsetoJSON', {
   enumerable: false
 });
 
+function requireDATA() {
+  this.stat = $.Deferred();
+}
+
+requireDATA.prototype = {
+  runQuery: function runQuery(url, obj, f) {
+
+    var json = $.parseJSON(JSON.stringify(obj));
+    console.log(json);
+    var _this = this;
+    $.ajax({
+      type: "POST",
+      url: url,
+      dataType: "JSON",
+      data: json,
+      error: function error(xhr, b, c) {
+        console.log("xhr=" + xhr + " b=" + b + " c=" + c);
+      },
+      success: function success(data) {
+        console.log(data);
+        if (typeof f == 'function') {
+          f(_this.IsJsonString(data) ? JSON.parse(data) : data);
+        }
+        _this.stat.resolve('and');
+      }
+    });
+
+    return this;
+  },
+
+  done: function done(f) {
+    var _this2 = this;
+
+    this.stat.promise().done(function () {
+      f();
+      return _this2;
+    });
+  },
+
+  IsJsonString: function IsJsonString(str) {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+};
+
+var HttpRequest = new requireDATA();
+
+//LZW Compression/Decompression for Strings
+var LZW = {
+  compress: function compress(uncompressed) {
+    "use strict";
+    // Build the dictionary.
+
+    var i,
+        dictionary = {},
+        c,
+        wc,
+        w = "",
+        result = [],
+        dictSize = 256;
+    for (i = 0; i < 256; i += 1) {
+      dictionary[String.fromCharCode(i)] = i;
+    }
+
+    for (i = 0; i < uncompressed.length; i += 1) {
+      c = uncompressed.charAt(i);
+      wc = w + c;
+      //Do not use dictionary[wc] because javascript arrays
+      //will return values for array['pop'], array['push'] etc
+      // if (dictionary[wc]) {
+      if (dictionary.hasOwnProperty(wc)) {
+        w = wc;
+      } else {
+        result.push(dictionary[w]);
+        // Add wc to the dictionary.
+        dictionary[wc] = dictSize++;
+        w = String(c);
+      }
+    }
+
+    // Output the code for w.
+    if (w !== "") {
+      result.push(dictionary[w]);
+    }
+    return result;
+  },
+
+  decompress: function decompress(compressed) {
+    "use strict";
+    // Build the dictionary.
+
+    var i,
+        dictionary = [],
+        w,
+        result,
+        k,
+        entry = "",
+        dictSize = 256;
+    for (i = 0; i < 256; i += 1) {
+      dictionary[i] = String.fromCharCode(i);
+    }
+
+    w = String.fromCharCode(compressed[0]);
+    result = w;
+    for (i = 1; i < compressed.length; i += 1) {
+      k = compressed[i];
+      if (dictionary[k]) {
+        entry = dictionary[k];
+      } else {
+        if (k === dictSize) {
+          entry = w + w.charAt(0);
+        } else {
+          return null;
+        }
+      }
+
+      result += entry;
+
+      // Add w+entry[0] to the dictionary.
+      dictionary[dictSize++] = w + entry.charAt(0);
+
+      w = entry;
+    }
+    return result;
+  }
+};
 //! moment.js
 //! version : 2.18.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -4514,14 +4644,15 @@ function putData(clb) {
     };
     jobQuery();
 
-    var data = new requireDATA();
-    data.runQuery(paths.main, {
+    HttpRequest.runQuery(paths.main, {
       getUserName: {
         id: "programmerName"
       },
       getObjectType: {
         id: "objectType"
       }
+    }, function () {
+      getData4JSON();
     }).done(function () {
       getObjName(true, null, null, function () {
 
@@ -4534,48 +4665,24 @@ function putData(clb) {
   });
 }
 
-function requireDATA() {
-  this.stat = $.Deferred();
-}
+var getData4JSON = function getData4JSON(data) {
+  $.each(JSON.parse(data), function (it, v) {
 
-requireDATA.prototype = {
-  runQuery: function runQuery(paths, jsobj) {
-    var _this2 = this;
+    if (v.condition != undefined && !v.condition) return;
 
-    $.get(paths + jsobj.parsetoJSON(), function (data) {
-      console.log(data);
-      $.each(JSON.parse(data), function (it, v) {
+    var selector = v.id != undefined ? '#' + v.id : '.' + v.class,
+        store = '';
 
-        if (v.condition != undefined && !v.condition) return;
-
-        var selector = v.id != undefined ? '#' + v.id : '.' + v.class,
-            store = '';
-
-        if (v.val instanceof Array) {
-          $.each(v.val, function (item, val) {
-            if (val != '') store += val;
-          });
-        }
-
-        store = store || v.val;
-
-        $(selector).html(store.replace(/^ | $/, ''));
+    if (v.val instanceof Array) {
+      $.each(v.val, function (item, val) {
+        if (val != '') store += val;
       });
-    }).done(function () {
-      _this2.stat.resolve('and');
-    });
+    }
 
-    return this;
-  },
+    store = store || v.val;
 
-  done: function done(f) {
-    var _this3 = this;
-
-    this.stat.promise().done(function () {
-      f();
-      return _this3;
-    });
-  }
+    $(selector).html(store.replace(/^ | $/, ''));
+  });
 };
 
 Object.prototype.getPjName = function (name, editor) {
@@ -7243,25 +7350,6 @@ function getCurentReport(name, date) {
 };
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var paths = {
-  main: './app/Controllers/mainInfoLoader.php?method=',
-  reportEditor: './app/Controllers/reportEditeTools.php?method='
-},
-    firstRun = true;
-
-Object.prototype.parsetoJSON = function () {
-  if (_typeof(this) == 'object') {
-    return JSON.stringify(this);
-  } else throw 'This val is not Object!';
-};
-
-Object.defineProperty(Object.prototype, 'parsetoJSON', {
-  enumerable: false
-});
-'use strict';
-
 var ajaxObj = {},
     wait = 500;
 
@@ -7329,8 +7417,8 @@ function insertData(object) {
   }.parsetoJSON(), function (data) {
     $('#editModal select#customer').html(data);
   }).done(function () {
-    var data = new requireDATA(),
-        storeobj = {
+
+    storeobj = {
       getProject: {
         id: "name",
         obj: {
@@ -7346,7 +7434,7 @@ function insertData(object) {
       }
     };
 
-    data.runQuery(paths.main, storeobj);
+    // HttpRequest.runQuery(paths.main, storeobj)
 
     //  $('select#userName').html($(''));
 
@@ -7926,17 +8014,19 @@ renderWeb = function renderWeb(page, refresh) {
     $("meta[name='curentPage']").attr('value', page || 'timeSheet');
   }
 
-  $.get('web/render.php?q=' + page, function (data) {
+  HttpRequest.runQuery('.', {
+    page: page || null
+  }, function (data) {
     $('.inputHere').html(data);
   }).done(function () {
 
-    putData(function () {
-      timeSheetRunEvent(page);
-    });
-
-    $('#programmerName').change(function () {
-      getCurentReport($(this).val(), 'getCalendar');
-    });
+    // putData(() => {
+    //   timeSheetRunEvent(page)
+    // })
+    //
+    // $('#programmerName').change(function() {
+    //   getCurentReport($(this).val(), 'getCalendar')
+    // })
   });
 },
     refrSwitch = function refrSwitch() {

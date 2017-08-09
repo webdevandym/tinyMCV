@@ -68,26 +68,26 @@ function insertData(object) {
       $('#editModal select#customer').html(data)
     })
     .done(() => {
-      let data = new requireDATA,
 
-        storeobj = {
-          getProject: {
-            id: "name",
-            obj: {
-              query: $('select#customer option:selected').val(),
-              switch: $('select#name option').html()
-            }
-          },
-          getUserName: {
-            id: "userName",
-            obj: {
-              edit: $('select#userName option').val()
-            }
+
+      storeobj = {
+        getProject: {
+          id: "name",
+          obj: {
+            query: $('select#customer option:selected').val(),
+            switch: $('select#name option').html()
           }
-        };
+        },
+        getUserName: {
+          id: "userName",
+          obj: {
+            edit: $('select#userName option').val()
+          }
+        }
+      };
 
 
-      data.runQuery(paths.main, storeobj)
+      // HttpRequest.runQuery(paths.main, storeobj)
 
       //  $('select#userName').html($(''));
 

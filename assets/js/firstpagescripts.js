@@ -24,7 +24,7 @@ let paintCanvas = function() {
     context.drawImage(image, 310, 0)
   }
 }
-//TODO: replace function to object prototype;
+
 
 
 function requireDATA() {
@@ -35,7 +35,7 @@ requireDATA.prototype = {
   runQuery: function(url, obj, f) {
 
     let json = $.parseJSON(JSON.stringify(obj));
-    console.log(json);
+
     $.ajax({
       type: "POST",
       url: url,
@@ -72,6 +72,7 @@ requireDATA.prototype = {
     return true;
   }
 }
+
 let request = new requireDATA();
 
 $('.loginInput').on('blur', function() {
@@ -114,13 +115,6 @@ function checkAndLogin() {
         }
       });
 
-    // $.ajax({
-    //   method: 'GET',
-    //   url: './core/loginControler/loginChecker.php?q=' + login + '&sendResult=true',
-    //   success: (data) => {
-    //
-    //   }
-    // })
 
   } else $('#errorHolder').html("<span class = 'error'>Please enter your domain username</span>");
 

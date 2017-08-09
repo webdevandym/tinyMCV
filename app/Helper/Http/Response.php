@@ -7,6 +7,6 @@ class Response
     public static function json($data)
     {
         header('Content-type: applicetion/json');
-        echo json_encode($data);
+        echo str_replace(['  ', '\n', '\t', '\r'], '', json_encode($data));
     }
 }
