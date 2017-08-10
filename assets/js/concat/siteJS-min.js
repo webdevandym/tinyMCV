@@ -3,7 +3,7 @@
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var paths = {
-  main: './app/Controllers/mainInfoLoader.php?method=',
+  get: 'Query/get',
   reportEditor: './app/Controllers/reportEditeTools.php?method='
 },
     firstRun = true;
@@ -26,18 +26,18 @@ requireDATA.prototype = {
   runQuery: function runQuery(url, obj, f) {
 
     var json = $.parseJSON(JSON.stringify(obj));
-    console.log(json);
     var _this = this;
+    console.log(json);
     $.ajax({
       type: "POST",
       url: url,
-      dataType: "JSON",
+      // dataType: "JSON",
       data: json,
       error: function error(xhr, b, c) {
         console.log("xhr=" + xhr + " b=" + b + " c=" + c);
       },
       success: function success(data) {
-        console.log(data);
+        // console.log(data);
         if (typeof f == 'function') {
           f(_this.IsJsonString(data) ? JSON.parse(data) : data);
         }
@@ -4615,55 +4615,68 @@ return hooks;
 function putData(clb) {
 
   // get customer
-
-  $.get(paths.main + 'getProject&object=' + {
-    query: 'Customer'
-  }.parsetoJSON(), function (data) {
-    $('#customerID').html(data);
-  })
-  // get Project and Users
-  .done(function () {
-
-    var ProjectItems = ['#projectID', '#objectType'];
-
-    for (var i = 0; i < ProjectItems.length; i++) {
-
-      $(ProjectItems[i]).change(function () {
-        getObjName();
-      });
-    };
-
-    $('#projectID').getPjName(document.getElementById("customerID").value);
-
-    var jobQuery = function jobQuery() {
-      if ($('#jobType')) {
-        $.get(paths.reportEditor + 'getJobType', function (data) {
-          $('#jobType').html(data);
-        });
-      }
-    };
-    jobQuery();
-
-    HttpRequest.runQuery(paths.main, {
-      getUserName: {
-        id: "programmerName"
-      },
-      getObjectType: {
-        id: "objectType"
-      }
-    }, function () {
-      getData4JSON();
-    }).done(function () {
-      getObjName(true, null, null, function () {
-
-        $('body').addClass('loaded');
-        if (typeof clb === 'function') {
-          clb();
-        }
-      });
-    });
+  HttpRequest.runQuery(paths.get, {
+    method: 'getProject',
+    val: {
+      query: 'Customer'
+    }
+  }, function (data) {
+    console.log(data);
   });
+
+  //
+  // $.get(paths.main + 'getProject&object=' + {
+  //     query: 'Customer'
+  //   }.parsetoJSON(), function(data) {
+  //     $('#customerID').html(data)
+  //   })
+  //   // get Project and Users
+  //   .done(() => {
+  //
+  //     var ProjectItems = ['#projectID', '#objectType'];
+  //
+  //     for (let i = 0; i < ProjectItems.length; i++) {
+  //
+  //       $(ProjectItems[i]).change(function() {
+  //         getObjName()
+  //       })
+  //     };
+  //
+  //     $('#projectID').getPjName(document.getElementById("customerID").value)
+  //
+  //     let jobQuery = function() {
+  //       if ($('#jobType')) {
+  //         $.get(paths.reportEditor + 'getJobType', function(data) {
+  //           $('#jobType').html(data);
+  //         })
+  //       }
+  //     }
+  //     jobQuery()
+  //
+  //     HttpRequest.runQuery(paths.main, {
+  //         getUserName: {
+  //           id: "programmerName"
+  //         },
+  //         getObjectType: {
+  //           id: "objectType"
+  //         }
+  //       }, function() {
+  //         getData4JSON();
+  //       })
+  //       .done(() => {
+  //         getObjName(true, null, null, () => {
+  //
+  //           $('body').addClass('loaded')
+  //           if (typeof clb === 'function') {
+  //             clb();
+  //           }
+  //         })
+  //       })
+  //
+  //   })
 }
+
+console.log('Ajax Loaded ...');
 
 var getData4JSON = function getData4JSON(data) {
   $.each(JSON.parse(data), function (it, v) {
@@ -8013,21 +8026,22 @@ renderWeb = function renderWeb(page, refresh) {
   } else {
     $("meta[name='curentPage']").attr('value', page || 'timeSheet');
   }
-
   HttpRequest.runQuery('.', {
     page: page || null
   }, function (data) {
     $('.inputHere').html(data);
   }).done(function () {
 
-    // putData(() => {
-    //   timeSheetRunEvent(page)
-    // })
-    //
-    // $('#programmerName').change(function() {
-    //   getCurentReport($(this).val(), 'getCalendar')
-    // })
-  });
+    putData();
+  }
+  /*() => {
+        timeSheetRunEvent(page)
+      }*/
+  //
+  // $('#programmerName').change(function() {
+  //   getCurentReport($(this).val(), 'getCalendar')
+  // })
+  );
 },
     refrSwitch = function refrSwitch() {
   renderWeb(null, true);
@@ -8118,8 +8132,7 @@ renderWeb = function renderWeb(page, refresh) {
     e.preventDefault();
   });
 
-  window.onload = function () {
+  $ || document.write('<script src="./assets/js/vendor/jquery-3.2.1.min.js"><\/script>'); //jQuery
 
-    $ || document.write('<script src="/../assets/js/vendor/jquery-3.2.1.min.js" async defer><\/script>'); //jQuery
-  };
+  console.log('Main JS Loaded ...');
 })();

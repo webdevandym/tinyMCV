@@ -1,58 +1,69 @@
 function putData(clb) {
 
   // get customer
-
-  $.get(paths.main + 'getProject&object=' + {
+  HttpRequest.runQuery(paths.get, {
+    method: 'getProject',
+    val: {
       query: 'Customer'
-    }.parsetoJSON(), function(data) {
-      $('#customerID').html(data)
-    })
-    // get Project and Users
-    .done(() => {
+    }
+  }, (data) => {
+    console.log(data);
+  });
 
-      var ProjectItems = ['#projectID', '#objectType'];
 
-      for (let i = 0; i < ProjectItems.length; i++) {
-
-        $(ProjectItems[i]).change(function() {
-          getObjName()
-        })
-      };
-
-      $('#projectID').getPjName(document.getElementById("customerID").value)
-
-      let jobQuery = function() {
-        if ($('#jobType')) {
-          $.get(paths.reportEditor + 'getJobType', function(data) {
-            $('#jobType').html(data);
-          })
-        }
-      }
-      jobQuery()
-
-      HttpRequest.runQuery(paths.main, {
-          getUserName: {
-            id: "programmerName"
-          },
-          getObjectType: {
-            id: "objectType"
-          }
-        }, function() {
-          getData4JSON();
-        })
-        .done(() => {
-          getObjName(true, null, null, () => {
-
-            $('body').addClass('loaded')
-            if (typeof clb === 'function') {
-              clb();
-            }
-          })
-        })
-
-    })
+  //
+  // $.get(paths.main + 'getProject&object=' + {
+  //     query: 'Customer'
+  //   }.parsetoJSON(), function(data) {
+  //     $('#customerID').html(data)
+  //   })
+  //   // get Project and Users
+  //   .done(() => {
+  //
+  //     var ProjectItems = ['#projectID', '#objectType'];
+  //
+  //     for (let i = 0; i < ProjectItems.length; i++) {
+  //
+  //       $(ProjectItems[i]).change(function() {
+  //         getObjName()
+  //       })
+  //     };
+  //
+  //     $('#projectID').getPjName(document.getElementById("customerID").value)
+  //
+  //     let jobQuery = function() {
+  //       if ($('#jobType')) {
+  //         $.get(paths.reportEditor + 'getJobType', function(data) {
+  //           $('#jobType').html(data);
+  //         })
+  //       }
+  //     }
+  //     jobQuery()
+  //
+  //     HttpRequest.runQuery(paths.main, {
+  //         getUserName: {
+  //           id: "programmerName"
+  //         },
+  //         getObjectType: {
+  //           id: "objectType"
+  //         }
+  //       }, function() {
+  //         getData4JSON();
+  //       })
+  //       .done(() => {
+  //         getObjName(true, null, null, () => {
+  //
+  //           $('body').addClass('loaded')
+  //           if (typeof clb === 'function') {
+  //             clb();
+  //           }
+  //         })
+  //       })
+  //
+  //   })
 }
 
+console.log('Ajax Loaded ...');
 
 let getData4JSON = function(data) {
   $.each(JSON.parse(data), (it, v) => {

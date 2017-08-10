@@ -2,7 +2,7 @@
 
 
 var paths = {
-    main: './app/Controllers/mainInfoLoader.php?method=',
+    get: 'Query/get',
     reportEditor: './app/Controllers/reportEditeTools.php?method='
   },
   firstRun = true;
@@ -28,18 +28,18 @@ requireDATA.prototype = {
   runQuery: function(url, obj, f) {
 
     var json = $.parseJSON(JSON.stringify(obj));
-    console.log(json);
     var _this = this;
+    console.log(json);
     $.ajax({
       type: "POST",
       url: url,
-      dataType: "JSON",
+      // dataType: "JSON",
       data: json,
       error: function(xhr, b, c) {
         console.log("xhr=" + xhr + " b=" + b + " c=" + c);
       },
       success: (data) => {
-        console.log(data)
+        // console.log(data);
         if (typeof f == 'function') {
           f(_this.IsJsonString(data) ? JSON.parse(data) : data);
         }

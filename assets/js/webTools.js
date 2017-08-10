@@ -14,7 +14,6 @@ var getCookie = (name) => {
     } else {
       $("meta[name='curentPage']").attr('value', page || 'timeSheet')
     }
-
     HttpRequest.runQuery('.', {
         page: page || null
       }, (data) => {
@@ -22,14 +21,17 @@ var getCookie = (name) => {
       })
       .done(function() {
 
-        // putData(() => {
-        //   timeSheetRunEvent(page)
-        // })
+        putData(
+          /*() => {
+                timeSheetRunEvent(page)
+              }*/
+        )
         //
         // $('#programmerName').change(function() {
         //   getCurentReport($(this).val(), 'getCalendar')
         // })
       });
+
   },
 
   refrSwitch = () => {
@@ -80,6 +82,7 @@ var getCookie = (name) => {
 
   loadClock = (user) => {
 
+
     function addZero(i) {
       if (i < 10) {
         i = "0" + i;
@@ -125,6 +128,7 @@ var getCookie = (name) => {
     return true;
   };
 
+
 (function() {
   renderWeb()
 
@@ -132,9 +136,7 @@ var getCookie = (name) => {
     e.preventDefault();
   });
 
-  window.onload = () => {
+  $ || document.write('<script src="./assets/js/vendor/jquery-3.2.1.min.js"><\/script>') //jQuery
 
-    $ || document.write('<script src="/../assets/js/vendor/jquery-3.2.1.min.js" async defer><\/script>') //jQuery
-  }
-
+  console.log('Main JS Loaded ...');
 })()

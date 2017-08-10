@@ -3,7 +3,7 @@
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var paths = {
-  main: './app/Controllers/mainInfoLoader.php?method=',
+  get: 'Query/get',
   reportEditor: './app/Controllers/reportEditeTools.php?method='
 },
     firstRun = true;
@@ -26,18 +26,18 @@ requireDATA.prototype = {
   runQuery: function runQuery(url, obj, f) {
 
     var json = $.parseJSON(JSON.stringify(obj));
-    console.log(json);
     var _this = this;
+    console.log(json);
     $.ajax({
       type: "POST",
       url: url,
-      dataType: "JSON",
+      // dataType: "JSON",
       data: json,
       error: function error(xhr, b, c) {
         console.log("xhr=" + xhr + " b=" + b + " c=" + c);
       },
       success: function success(data) {
-        console.log(data);
+        // console.log(data);
         if (typeof f == 'function') {
           f(_this.IsJsonString(data) ? JSON.parse(data) : data);
         }

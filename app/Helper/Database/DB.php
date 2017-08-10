@@ -70,11 +70,6 @@ class DB extends Connector
         }
     }
 
-    public function close()
-    {
-        $this->db = null;
-    }
-
     public function clrStr($var)
     {
         if (!is_object($var)) {

@@ -22,6 +22,13 @@ class Connector
     {
     }
 
+    public function close($callback = null)
+    {
+        $this->db = null;
+
+        return $callback;
+    }
+
     public function conn()
     {
         if (empty($this->db)) {

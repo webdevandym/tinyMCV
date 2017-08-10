@@ -7,13 +7,7 @@ class Request
     public function __construct()
     {
         $data = $this->loadRequest();
-
-        if (is_array($data)) {
-            foreach ($data as $key => $value) {
-                $this->{$key} = $this->clearString($value);
-            }
-        }
-
+        $this->getRequest($data, $this);
         if (!empty($data)) {
             $this->statusRequest = 1;
         } else {
@@ -35,6 +29,23 @@ class Request
 
     private function clearString($str)
     {
-        return stripslashes(htmlentities(strip_tags($str)));
+        if (is_string($str)) {
+            return stripslashes(htmlentities(strip_tags($str)));
+        }
+        throw new \Exception(print_r($str));
+    }
+
+    private function getRequest($data, $object)
+    {
+        if (is_array($data)) {
+            foreach ($data as $key => $value) {
+                if (is_array($value)) {
+                    $object->{$key} = new \StdClass();
+                    $this->getRequest($value, $object->{$key});
+                } else {
+                    $object->{$key} = $this->clearString($value);
+                }
+            }
+        }
     }
 }

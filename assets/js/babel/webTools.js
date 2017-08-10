@@ -17,21 +17,22 @@ renderWeb = function renderWeb(page, refresh) {
   } else {
     $("meta[name='curentPage']").attr('value', page || 'timeSheet');
   }
-
   HttpRequest.runQuery('.', {
     page: page || null
   }, function (data) {
     $('.inputHere').html(data);
   }).done(function () {
 
-    // putData(() => {
-    //   timeSheetRunEvent(page)
-    // })
-    //
-    // $('#programmerName').change(function() {
-    //   getCurentReport($(this).val(), 'getCalendar')
-    // })
-  });
+    putData();
+  }
+  /*() => {
+        timeSheetRunEvent(page)
+      }*/
+  //
+  // $('#programmerName').change(function() {
+  //   getCurentReport($(this).val(), 'getCalendar')
+  // })
+  );
 },
     refrSwitch = function refrSwitch() {
   renderWeb(null, true);
@@ -122,8 +123,7 @@ renderWeb = function renderWeb(page, refresh) {
     e.preventDefault();
   });
 
-  window.onload = function () {
+  $ || document.write('<script src="./assets/js/vendor/jquery-3.2.1.min.js"><\/script>'); //jQuery
 
-    $ || document.write('<script src="/../assets/js/vendor/jquery-3.2.1.min.js" async defer><\/script>'); //jQuery
-  };
+  console.log('Main JS Loaded ...');
 })();

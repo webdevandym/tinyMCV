@@ -35,12 +35,18 @@ class Cache
 
     public static function set($key, $time, $res)
     {
+        if (empty($res)) {
+            return false;
+        }
+
         self::initConn();
         try {
             echo md5((string) $key);
             self::$memcache->add(md5((string) $key), json_encode($res), 0, $time);
 
-            return self::close();
+            self::close();
+
+            return $res;
         } catch (\MemcachedException $e) {
             return false;
         }

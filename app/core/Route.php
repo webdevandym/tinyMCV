@@ -44,16 +44,16 @@ class Route
         $fullControlerNamePath = static::$controllerNameSpace.$controllerName;
 
         if (!class_exists($fullControlerNamePath)) {
-            return self::ErrorPage404();
+            // return self::ErrorPage404();
         }
 
         $controller = new $fullControlerNamePath();
         $action = $actionName;
 
         if (!method_exists($controller, $action)) {
-            return self::ErrorPage404();
+            // return self::ErrorPage404();
         }
-
+        // print_r(new Request());
         $controller->$action(new Request());
     }
 
