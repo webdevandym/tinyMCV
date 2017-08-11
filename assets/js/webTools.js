@@ -109,18 +109,19 @@ var getCookie = (name) => {
       marginTop = typeof InstallTrigger !== 'undefined' ? 20 : 15,
       paddingLeft = typeof InstallTrigger !== 'undefined' ? 140 : 135;
 
+    let draw = () => {
+      context.font = 'bold 15px "PT Sans"'
+      context.fillText(date.toJSON().split("T")[0] + " " + addZero(date.getHours()) + ":" + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds()), 0, marginTop)
+      context.fillText("  Logged user: " + userName, paddingLeft, marginTop)
+    }
 
     context.fillStyle = color
-    context.font = 'bold 15px "PT Sans"'
-    context.fillText(date.toJSON().split("T")[0] + " " + addZero(date.getHours()) + ":" + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds()), 0, marginTop)
-    context.fillText("  Logged user: " + userName, paddingLeft, marginTop)
+    draw();
 
     setInterval(function() {
       date = new Date()
       context.clearRect(0, 0, canvas.width, canvas.height);
-      context.font = 'bold 15px "PT Sans"'
-      context.fillText(date.toJSON().split("T")[0] + " " + addZero(date.getHours()) + ":" + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds()), 0, marginTop)
-      context.fillText("  Logged user: " + userName, paddingLeft, marginTop)
+      draw();
 
 
     }, 1000)
@@ -138,5 +139,5 @@ var getCookie = (name) => {
 
   $ || document.write('<script src="./assets/js/vendor/jquery-3.2.1.min.js"><\/script>') //jQuery
 
-  console.log('Main JS Loaded ...');
+  console.log('STATUS: Main JS file loaded ...');
 })()

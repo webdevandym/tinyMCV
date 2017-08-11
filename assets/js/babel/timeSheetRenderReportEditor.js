@@ -335,7 +335,12 @@ function getObjName(skip, way, trVal, callback) {
 
     if (transfVal.name == undefined && transfVal.type == undefined) return runAgain();
 
-    $.when($.get(paths.reportEditor + 'getObjectName&object=' + transfVal.parsetoJSON(), function (data) {
+    $.when(HttpRequest.runQuery(paths.get, {
+      method: 'getObjectName',
+      data: {
+        transfVal: transfVal
+      }
+    }, function (data) {
       $(way).html(data);
     })).fail(function () {
       return runAgain();

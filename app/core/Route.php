@@ -2,9 +2,6 @@
 
 namespace app\core;
 
-//return request from front-end
-use app\Helper\Http\Request;
-
 class Route
 {
     protected static $host;
@@ -54,7 +51,7 @@ class Route
             // return self::ErrorPage404();
         }
         // print_r(new Request());
-        $controller->$action(new Request());
+        $controller->$action(new \app\Helper\Http\Request());
     }
 
     public function ErrorPage404()

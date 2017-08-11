@@ -6,8 +6,58 @@ use app\Helper\Database\messStore;
 use app\Helper\Users\User;
 use app\Models\ClassStore\QueryLauncher;
 
-class ModelQueryresponse extends QueryLauncher
+class ModelQueryGet extends QueryLauncher
 {
+    /**********************************************************************/
+    /*************************getJobType***********************************/
+    /**********************************************************************/
+
+    public function getJobType($selector)
+    {
+        $select = $this->chkProp($selector, 'select');
+
+        $result = $this->cacheData(24 * 60 * 60, 'SELECT name,id FROM proj_jobtypes ORDER BY id', $select);
+
+        foreach ($result as $row) {
+            echo '<option '.((!empty($select) && $select === $row->name) ? ' selected="selected"' : '')." value='".$row->id."'>".$row->name.'</option>';
+        }
+    }
+
+    /**********************************************************************/
+    /*************************getObjectName***********************************/
+    /**********************************************************************/
+
+    public function getObjectName($valObj)
+    {
+        list($name, $type) = $this->chkProp($valObj, ['name', 'type']);
+
+        $type = ((int) $type === 5) ? 'ALL' : $type;
+
+        $sql = "EXEC pr_ObjName @type = '$type', @name = '$name'";
+
+        $result = $this->cacheData(24 * 60 * 60, $sql, $name.$type);
+
+        $a = $select = $b = '';
+
+        foreach ($result as $row) {
+            if (strtolower($row->object_num) === '-none-') {
+                $b .= "<option value='".$row->id."'>".$row->object_num.'</option>';
+            } else {
+                $a .= "<option value='".$row->id."'>".$row->object_num.'</option>';
+            }
+        }
+
+        $res = $b.$a;
+        if ($res) {
+            echo $res;
+        } else {
+            return false;
+        }
+    }
+
+    /**********************************************************************/
+    /*************************getUserName**********************************/
+    /**********************************************************************/
     protected function getUserName($switch)
     {
         User::checkSESSION();
@@ -24,7 +74,7 @@ class ModelQueryresponse extends QueryLauncher
         $i = 0;
 
         foreach ($result as $row) {
-            $a[$i++] = '<option'.($getTask === $row['name'] ? " selected = 'selected' " : '')." value = '".$row['name']."' idnum = '".$row['id']."'>".$row[$showName].'</option>';
+            $a[$i++] = '<option'.($getTask === $row['name'] ? " selected = 'selected' " : '')." value = '".$row['name']."' idnum = '".$row->id."'>".$row[$showName].'</option>';
         }
 
         return $a;
@@ -35,8 +85,8 @@ class ModelQueryresponse extends QueryLauncher
         $result = $this->cacheData(24 * 60 * 60, 'SELECT name,id FROM proj_objtypes order by id');
         $i = 0;
         foreach ($result as $row) {
-            if ((int) $row['id'] !== 5) {
-                $a[$i++] = "<option value = '".$row['id']."'>".$row['name'].'</option>';
+            if ((int) $row->id !== 5) {
+                $a[$i++] = "<option value = '".$row->id."'>".$row['name'].'</option>';
             }
         }
 
@@ -44,6 +94,10 @@ class ModelQueryresponse extends QueryLauncher
 
         return $a;
     }
+
+    /**********************************************************************/
+    /*************************getProject***********************************/
+    /**********************************************************************/
 
     protected function getProject($query)
     {
@@ -72,6 +126,9 @@ class ModelQueryresponse extends QueryLauncher
         return $a;
     }
 
+    /**********************************************************************/
+    /*************************getReportWeek***********************************/
+    /**********************************************************************/
     protected function getReportWeek($userInfo)
     {
         list($name, $startDate, $endDate) = $this->chkProp($userInfo, ['name', 'startDate', 'endDate']);
@@ -91,7 +148,7 @@ class ModelQueryresponse extends QueryLauncher
 
         foreach ($result as $row) {
             $table .= <<<_END
-	<tr id = "it{$row['id']}_{$row['object_id']}">
+	<tr id = "it{$row->id}_{$row['object_id']}">
   <td colspan = '2' class = 'chekerDelete' delrec = ''><i class="fa fa-chevron-down " aria-hidden="true"></i></td>
 	<td class = 'editRow' data-toggle="modal" data-target="#editModal" onclick = "insertData(this)"><i class="fa fa-pencil" aria-hidden="true"></i></td>
 	<td class = 'deleteRow' data-toggle="modal" data-target="#deleteModal" onclick = "getTDID(this);"><i class="fa fa-times" aria-hidden="true"></i></td>

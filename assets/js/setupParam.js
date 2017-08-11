@@ -2,7 +2,7 @@
 
 
 var paths = {
-    get: 'Query/get',
+    get: 'Query/getdata',
     reportEditor: './app/Controllers/reportEditeTools.php?method='
   },
   firstRun = true;
@@ -30,7 +30,7 @@ requireDATA.prototype = {
     var json = $.parseJSON(JSON.stringify(obj));
     var _this = this;
     console.log(json);
-    $.ajax({
+    return $.ajax({
       type: "POST",
       url: url,
       // dataType: "JSON",
@@ -39,23 +39,35 @@ requireDATA.prototype = {
         console.log("xhr=" + xhr + " b=" + b + " c=" + c);
       },
       success: (data) => {
-        // console.log(data);
+        // cons ole.log(data);
         if (typeof f == 'function') {
-          f(_this.IsJsonString(data) ? JSON.parse(data) : data);
+          f(_this.IsJsonString(data) ? JSON.parse(data) : data)
+
         }
         _this.stat.resolve('and')
+        return _this;
       }
-    })
 
-    return this;
+    });
+
+    // return (function(data) {
+    //   if (typeof f == 'function') {
+    //     f(_this.IsJsonString(data) ? JSON.parse(data) : data)
+    //     return _this
+    //   }
+    // })();
+
   },
 
 
   done: function(f) {
-    this.stat.promise().done(() => {
+    let _this = this;
+    return this.stat.promise().done(() => {
       f();
-      return this;
+      _this.stat.resolve('and')
+      return _this;
     })
+
   },
 
   IsJsonString(str) {
@@ -69,83 +81,3 @@ requireDATA.prototype = {
 }
 
 var HttpRequest = new requireDATA();
-
-
-//LZW Compression/Decompression for Strings
-var LZW = {
-  compress: function(uncompressed) {
-    "use strict";
-    // Build the dictionary.
-    var i,
-      dictionary = {},
-      c,
-      wc,
-      w = "",
-      result = [],
-      dictSize = 256;
-    for (i = 0; i < 256; i += 1) {
-      dictionary[String.fromCharCode(i)] = i;
-    }
-
-    for (i = 0; i < uncompressed.length; i += 1) {
-      c = uncompressed.charAt(i);
-      wc = w + c;
-      //Do not use dictionary[wc] because javascript arrays
-      //will return values for array['pop'], array['push'] etc
-      // if (dictionary[wc]) {
-      if (dictionary.hasOwnProperty(wc)) {
-        w = wc;
-      } else {
-        result.push(dictionary[w]);
-        // Add wc to the dictionary.
-        dictionary[wc] = dictSize++;
-        w = String(c);
-      }
-    }
-
-    // Output the code for w.
-    if (w !== "") {
-      result.push(dictionary[w]);
-    }
-    return result;
-  },
-
-
-  decompress: function(compressed) {
-    "use strict";
-    // Build the dictionary.
-    var i,
-      dictionary = [],
-      w,
-      result,
-      k,
-      entry = "",
-      dictSize = 256;
-    for (i = 0; i < 256; i += 1) {
-      dictionary[i] = String.fromCharCode(i);
-    }
-
-    w = String.fromCharCode(compressed[0]);
-    result = w;
-    for (i = 1; i < compressed.length; i += 1) {
-      k = compressed[i];
-      if (dictionary[k]) {
-        entry = dictionary[k];
-      } else {
-        if (k === dictSize) {
-          entry = w + w.charAt(0);
-        } else {
-          return null;
-        }
-      }
-
-      result += entry;
-
-      // Add w+entry[0] to the dictionary.
-      dictionary[dictSize++] = w + entry.charAt(0);
-
-      w = entry;
-    }
-    return result;
-  }
-}

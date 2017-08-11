@@ -3,7 +3,7 @@
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var paths = {
-  get: 'Query/get',
+  get: 'Query/getdata',
   reportEditor: './app/Controllers/reportEditeTools.php?method='
 },
     firstRun = true;
@@ -28,7 +28,7 @@ requireDATA.prototype = {
     var json = $.parseJSON(JSON.stringify(obj));
     var _this = this;
     console.log(json);
-    $.ajax({
+    return $.ajax({
       type: "POST",
       url: url,
       // dataType: "JSON",
@@ -37,23 +37,30 @@ requireDATA.prototype = {
         console.log("xhr=" + xhr + " b=" + b + " c=" + c);
       },
       success: function success(data) {
-        // console.log(data);
+        // cons ole.log(data);
         if (typeof f == 'function') {
           f(_this.IsJsonString(data) ? JSON.parse(data) : data);
         }
         _this.stat.resolve('and');
+        return _this;
       }
+
     });
 
-    return this;
+    // return (function(data) {
+    //   if (typeof f == 'function') {
+    //     f(_this.IsJsonString(data) ? JSON.parse(data) : data)
+    //     return _this
+    //   }
+    // })();
   },
 
   done: function done(f) {
-    var _this2 = this;
-
-    this.stat.promise().done(function () {
+    var _this = this;
+    return this.stat.promise().done(function () {
       f();
-      return _this2;
+      _this.stat.resolve('and');
+      return _this;
     });
   },
 
@@ -68,86 +75,6 @@ requireDATA.prototype = {
 };
 
 var HttpRequest = new requireDATA();
-
-//LZW Compression/Decompression for Strings
-var LZW = {
-  compress: function compress(uncompressed) {
-    "use strict";
-    // Build the dictionary.
-
-    var i,
-        dictionary = {},
-        c,
-        wc,
-        w = "",
-        result = [],
-        dictSize = 256;
-    for (i = 0; i < 256; i += 1) {
-      dictionary[String.fromCharCode(i)] = i;
-    }
-
-    for (i = 0; i < uncompressed.length; i += 1) {
-      c = uncompressed.charAt(i);
-      wc = w + c;
-      //Do not use dictionary[wc] because javascript arrays
-      //will return values for array['pop'], array['push'] etc
-      // if (dictionary[wc]) {
-      if (dictionary.hasOwnProperty(wc)) {
-        w = wc;
-      } else {
-        result.push(dictionary[w]);
-        // Add wc to the dictionary.
-        dictionary[wc] = dictSize++;
-        w = String(c);
-      }
-    }
-
-    // Output the code for w.
-    if (w !== "") {
-      result.push(dictionary[w]);
-    }
-    return result;
-  },
-
-  decompress: function decompress(compressed) {
-    "use strict";
-    // Build the dictionary.
-
-    var i,
-        dictionary = [],
-        w,
-        result,
-        k,
-        entry = "",
-        dictSize = 256;
-    for (i = 0; i < 256; i += 1) {
-      dictionary[i] = String.fromCharCode(i);
-    }
-
-    w = String.fromCharCode(compressed[0]);
-    result = w;
-    for (i = 1; i < compressed.length; i += 1) {
-      k = compressed[i];
-      if (dictionary[k]) {
-        entry = dictionary[k];
-      } else {
-        if (k === dictSize) {
-          entry = w + w.charAt(0);
-        } else {
-          return null;
-        }
-      }
-
-      result += entry;
-
-      // Add w+entry[0] to the dictionary.
-      dictionary[dictSize++] = w + entry.charAt(0);
-
-      w = entry;
-    }
-    return result;
-  }
-};
 //! moment.js
 //! version : 2.18.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -4617,41 +4544,36 @@ function putData(clb) {
   // get customer
   HttpRequest.runQuery(paths.get, {
     method: 'getProject',
-    val: {
+    data: {
       query: 'Customer'
     }
   }, function (data) {
-    console.log(data);
+    $('#customerID').html(data);
+  }).done(function () {
+    var ProjectItems = ['#projectID', '#objectType'];
+
+    for (var i = 0; i < ProjectItems.length; i++) {
+
+      $(ProjectItems[i]).change(function () {
+        getObjName();
+      });
+    };
+
+    console.log(document.getElementById("customerID").value);
+
+    $('#projectID').getPjName(document.getElementById("customerID").value);
   });
 
-  //
-  // $.get(paths.main + 'getProject&object=' + {
-  //     query: 'Customer'
-  //   }.parsetoJSON(), function(data) {
-  //     $('#customerID').html(data)
-  //   })
-  //   // get Project and Users
-  //   .done(() => {
-  //
-  //     var ProjectItems = ['#projectID', '#objectType'];
-  //
-  //     for (let i = 0; i < ProjectItems.length; i++) {
-  //
-  //       $(ProjectItems[i]).change(function() {
-  //         getObjName()
-  //       })
-  //     };
-  //
-  //     $('#projectID').getPjName(document.getElementById("customerID").value)
-  //
-  //     let jobQuery = function() {
-  //       if ($('#jobType')) {
-  //         $.get(paths.reportEditor + 'getJobType', function(data) {
-  //           $('#jobType').html(data);
-  //         })
-  //       }
-  //     }
-  //     jobQuery()
+  if ($('#jobType')) {
+    console.log('hi');
+    var request = new requireDATA();
+    request.runQuery(paths.get, {
+      method: 'getJobType'
+    }, function (data) {
+      $('#jobType').html(data);
+    });
+  }
+
   //
   //     HttpRequest.runQuery(paths.main, {
   //         getUserName: {
@@ -4676,7 +4598,7 @@ function putData(clb) {
   //   })
 }
 
-console.log('Ajax Loaded ...');
+console.log('STATUS: Ajax request file loaded ...');
 
 var getData4JSON = function getData4JSON(data) {
   $.each(JSON.parse(data), function (it, v) {
@@ -4699,12 +4621,15 @@ var getData4JSON = function getData4JSON(data) {
 };
 
 Object.prototype.getPjName = function (name, editor) {
-  var path = "./web/forms",
-      _this = this;
 
-  $.get(paths.main + 'getProject&object=' + {
-    query: name
-  }.parsetoJSON(), function (data) {
+  var _this = this;
+
+  HttpRequest.runQuery(paths.get, {
+    method: 'getProject',
+    data: {
+      query: name
+    }
+  }, function (data) {
     $(_this).html(data);
   }).done(function () {
     if (document.getElementById('jobType')) {
@@ -4721,6 +4646,27 @@ Object.prototype.getPjName = function (name, editor) {
       firstRun = false;
     }
   });
+
+  // $.get(paths.main + 'getProject&object=' + {
+  //   query: name
+  // }.parsetoJSON(), function(data) {
+  //   $(_this).html(data)
+  // }).done(function() {
+  //   if (document.getElementById('jobType')) {
+  //     let transfVal = 0,
+  //       obj = 0;
+  //
+  //     if (editor) {
+  //       transfVal = trval || {
+  //           name: $('#name option:selected').val(),
+  //           type: $('#objectType_m option:selected').val()
+  //         },
+  //         obj = "#objNameTS_m";
+  //     };
+  //     getObjName(0, obj, transfVal)
+  //     firstRun = false;
+  //   }
+  // })
 };
 
 Object.defineProperty(Object.prototype, 'getPjName', {
@@ -7698,7 +7644,12 @@ function getObjName(skip, way, trVal, callback) {
 
     if (transfVal.name == undefined && transfVal.type == undefined) return runAgain();
 
-    $.when($.get(paths.reportEditor + 'getObjectName&object=' + transfVal.parsetoJSON(), function (data) {
+    $.when(HttpRequest.runQuery(paths.get, {
+      method: 'getObjectName',
+      data: {
+        transfVal: transfVal
+      }
+    }, function (data) {
       $(way).html(data);
     })).fail(function () {
       return runAgain();
@@ -8109,17 +8060,19 @@ renderWeb = function renderWeb(page, refresh) {
       marginTop = typeof InstallTrigger !== 'undefined' ? 20 : 15,
       paddingLeft = typeof InstallTrigger !== 'undefined' ? 140 : 135;
 
+  var draw = function draw() {
+    context.font = 'bold 15px "PT Sans"';
+    context.fillText(date.toJSON().split("T")[0] + " " + addZero(date.getHours()) + ":" + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds()), 0, marginTop);
+    context.fillText("  Logged user: " + userName, paddingLeft, marginTop);
+  };
+
   context.fillStyle = color;
-  context.font = 'bold 15px "PT Sans"';
-  context.fillText(date.toJSON().split("T")[0] + " " + addZero(date.getHours()) + ":" + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds()), 0, marginTop);
-  context.fillText("  Logged user: " + userName, paddingLeft, marginTop);
+  draw();
 
   setInterval(function () {
     date = new Date();
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.font = 'bold 15px "PT Sans"';
-    context.fillText(date.toJSON().split("T")[0] + " " + addZero(date.getHours()) + ":" + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds()), 0, marginTop);
-    context.fillText("  Logged user: " + userName, paddingLeft, marginTop);
+    draw();
   }, 1000);
 
   return true;
@@ -8134,5 +8087,5 @@ renderWeb = function renderWeb(page, refresh) {
 
   $ || document.write('<script src="./assets/js/vendor/jquery-3.2.1.min.js"><\/script>'); //jQuery
 
-  console.log('Main JS Loaded ...');
+  console.log('STATUS: Main JS file loaded ...');
 })();

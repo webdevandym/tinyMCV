@@ -25,8 +25,9 @@ class Connector
     public function close($callback = null)
     {
         $this->db = null;
-
-        return $callback;
+        if (is_callable($callback)) {
+            return $callback();
+        }
     }
 
     public function conn()

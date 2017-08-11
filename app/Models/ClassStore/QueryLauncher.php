@@ -11,7 +11,7 @@ class QueryLauncher extends QueryModel
     {
         $m = json_decode($request->method);
         $this->method = is_object($m) ? $this->clr($m) : $request->method;
-        $this->transfVal = $request->val;
+        $this->transfVal = $this->chkProp($request, 'data');
         // throw new \Exception(print_r($request));
     }
 
@@ -33,7 +33,7 @@ class QueryLauncher extends QueryModel
                 $this->method->$keyclr->val = $this->runQuery($keyclr, $objectVal);
             }
 
-            return $this->db->close($this->method);
+            return $this->db->close(function () { return $this->method; });
         }
 
         if (!method_exists($this, $this->method)) {
@@ -46,14 +46,15 @@ class QueryLauncher extends QueryModel
         //     }
         // }
 
-        $this->runQuery($this->method, $this->transfVal);
-        $this->db->close();
-        throw new \Exception(print_r($this->db));
+        return  $this->runQuery($this->method, $this->transfVal, function () { $this->db->close(); });
     }
 
-    protected function runQuery($method, $val)
+    protected function runQuery($method, $val, $callback = null)
     {
         $res = $this->{$method}($val);
+        if (is_callable($callback)) {
+            $callback();
+        }
 
         return $res;
     }

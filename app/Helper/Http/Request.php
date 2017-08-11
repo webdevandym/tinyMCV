@@ -39,7 +39,7 @@ class Request
     {
         if (is_array($data)) {
             foreach ($data as $key => $value) {
-                if (is_array($value)) {
+                if (is_array($value) || is_object($value)) {
                     $object->{$key} = new \StdClass();
                     $this->getRequest($value, $object->{$key});
                 } else {
