@@ -9,32 +9,35 @@ function putData(clb) {
         query: 'Customer'
       }
     }, (data) => {
-      $('#customerID').html(data);
+      $('#customerID')
+        .html(data);
     })
-    .done(function() {
+    .done(function () {
       var ProjectItems = ['#projectID', '#objectType'];
 
       for (let i = 0; i < ProjectItems.length; i++) {
 
-        $(ProjectItems[i]).change(function() {
-          getObjName()
-        })
+        $(ProjectItems[i])
+          .change(function () {
+            getObjName()
+          })
       };
 
-
-
-      $('#projectID').getPjName(document.getElementById("customerID").value)
+      $('#projectID')
+        .getPjName(document.getElementById("customerID")
+          .value)
     })
 
 
   if ($('#jobType')) {
     // console.log('hi');
-    let request = new requireDATA();
-    request.runQuery(paths.get, {
+    //let request = new requireDATA();
+    HttpRequest.runQuery(paths.get, {
       method: 'getJobType',
     }, (data) => {
 
-      $('#jobType').html(data);
+      $('#jobType')
+        .html(data);
     })
 
   }
@@ -48,13 +51,14 @@ function putData(clb) {
         method: 'getObjectType',
         id: "objectType"
       }
-    }, function(data) {
+    }, function (data) {
       getData4JSON(data);
     })
     .done(() => {
       getObjName(true, null, null, () => {
 
-        $('body').addClass('loaded')
+        $('body')
+          .addClass('loaded')
         if (typeof clb === 'function') {
           clb();
         }
@@ -64,9 +68,9 @@ function putData(clb) {
 
 console.log('STATUS: Ajax request file loaded ...');
 
-let getData4JSON = function(data) {
+let getData4JSON = function (data) {
 
-  $.each((function() {
+  $.each((function () {
     try {
       let res = JSON.parse(data)
       return res
@@ -76,7 +80,6 @@ let getData4JSON = function(data) {
   })(), (it, v) => {
     // console.log(v);
     if (v.val) {
-
 
       if (v.condition != undefined && !v.condition) return;
 
@@ -91,13 +94,14 @@ let getData4JSON = function(data) {
 
       store = store || v.val;
 
-      $(selector).html(store.replace(/^ | $/, ''))
+      $(selector)
+        .html(store.replace(/^ | $/, ''))
     }
   })
 }
 
 
-Object.prototype.getPjName = function(name, editor) {
+Object.prototype.getPjName = function (name, editor) {
 
   let _this = this;
 
@@ -108,9 +112,10 @@ Object.prototype.getPjName = function(name, editor) {
       }
     }, (data) => {
 
-      $(_this).html(data);
+      $(_this)
+        .html(data);
     })
-    .done(function() {
+    .done(function () {
 
       if (document.getElementById('jobType')) {
         let transfVal = 0,
@@ -118,8 +123,10 @@ Object.prototype.getPjName = function(name, editor) {
 
         if (editor) {
           transfVal = trval || {
-              name: $('#name option:selected').val(),
-              type: $('#objectType_m option:selected').val()
+              name: $('#name option:selected')
+                .val(),
+              type: $('#objectType_m option:selected')
+                .val()
             },
             obj = "#objNameTS_m";
         };

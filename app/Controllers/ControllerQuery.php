@@ -12,13 +12,9 @@ use app\Models\ModelQueryGet;
  */
 class ControllerQuery extends Controller
 {
-    public function __construct()
-    {
-        $this->model = new ModelQueryGet();
-    }
-
     public function actionGetdata(Request $request)
     {
+        $this->model = new ModelQueryGet();
         $this->model->init($request);
         $res = $this->model->runVisiter();
 

@@ -7,7 +7,7 @@ var paths = {
   },
   firstRun = true;
 
-Object.prototype.parsetoJSON = function() {
+Object.prototype.parsetoJSON = function () {
   if (typeof this == 'object') {
     return JSON.stringify(this);
   } else throw 'This val is not Object!';
@@ -25,7 +25,7 @@ function requireDATA() {
 }
 
 requireDATA.prototype = {
-  runQuery: function(url, obj, f) {
+  runQuery: function (url, obj, f) {
 
     var json = $.parseJSON(JSON.stringify(obj));
     var _this = this;
@@ -35,38 +35,29 @@ requireDATA.prototype = {
       url: url,
       // dataType: "JSON",
       data: json,
-      error: function(xhr, b, c) {
+      error: function (xhr, b, c) {
         console.log("xhr=" + xhr + " b=" + b + " c=" + c);
       },
       success: (data) => {
         // console.log(data);
         if (typeof f == 'function') {
           f(_this.IsJsonString(data) ? JSON.parse(data) : data)
-
         }
         _this.stat.resolve('and')
         return _this;
       }
-
     });
-
-    // return (function(data) {
-    //   if (typeof f == 'function') {
-    //     f(_this.IsJsonString(data) ? JSON.parse(data) : data)
-    //     return _this
-    //   }
-    // })();
-
   },
 
 
-  done: function(f) {
+  done: function (f) {
     let _this = this;
-    return this.stat.promise().done(() => {
-      f();
-      _this.stat.resolve('and')
-      return _this;
-    })
+    return this.stat.promise()
+      .done(() => {
+        f();
+        _this.stat.resolve('and')
+        return _this;
+      })
 
   },
 

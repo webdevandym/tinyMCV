@@ -1,7 +1,7 @@
 function tableSortAlg() {
   let index = 0;
   $('#tableReport th').off()
-  $('#tableReport th').on('click', function() {
+  $('#tableReport th').on('click', function () {
     var nameList = [],
       sortVal = [],
       sorto = {},
@@ -17,14 +17,14 @@ function tableSortAlg() {
       if ($(this).attr('class')) $(this).attr('sortNum', index)
       else $(this).attr('sortNum', '')
 
-      $('#tableReport th').each(function(j, elem) {
+      $('#tableReport th').each(function (j, elem) {
         if ($(elem).attr('sortNum')) {
           nameList[index - $(elem).attr('sortNum')] = $(elem).attr('attr')
           sortVal[index - $(elem).attr('sortNum')] = $(elem).attr('class')
         }
       })
 
-      $('#tableReport th').each(function(ind, elem) {
+      $('#tableReport th').each(function (ind, elem) {
         if (!$(elem).attr('sortNum')) {
           nameList.push($(elem).attr('attr'))
           sortVal.push('skip')
@@ -54,15 +54,15 @@ function tableSortAlg() {
 
 };
 
-Object.prototype.disassembleTable = function(columnsName) {
+Object.prototype.disassembleTable = function (columnsName) {
   let obja = [],
     counter;
 
-  $(this).each(function(i, elem) {
+  $(this).each(function (i, elem) {
     let objectRow = {},
       counter = 0;
 
-    $(this).children().each(function(j, child) {
+    $(this).children().each(function (j, child) {
 
       if ($(this).text() != '') {
         if (columnsName[counter] == 'name') {
@@ -88,14 +88,14 @@ Object.defineProperty(Object.prototype, 'disassembleTable', {
 });
 
 
-Object.prototype.renderSortReport = function(outTable) {
+Object.prototype.renderSortReport = function (outTable) {
 
   if (typeof outTable == 'undefined') {
     throw "Out Table value empty, check input value! renderSortReport();"
   } else
 
   {
-    let obLen = function(obj) {
+    let obLen = function (obj) {
       var size = 0,
         key;
       for (key in obj) {
@@ -128,14 +128,14 @@ function throwError(err) {
   throw ('Ошибка ' + err.name + ":" + err.message + "\n" + err.stack);
 }
 
-Object.prototype.highlightRowTable = function(colName) {
+Object.prototype.highlightRowTable = function (colName) {
   let allVal = [],
     allID = [],
     result = {},
     summH = [],
     alltime = 0;
 
-  $(this).find(colName).each(function(index, element) {
+  $(this).find(colName).each(function (index, element) {
     if (colName == 'name') allVal.push($(this).children('span').text() + $(this).html().split('<br>')[0])
     else allVal.push($(this).html())
     allID.push($(this).parent('tr').attr('id'))
@@ -152,7 +152,7 @@ Object.prototype.highlightRowTable = function(colName) {
 
   $('head style').remove();
 
-  $.each(result, function(index, value) {
+  $.each(result, function (index, value) {
     $('#' + value).css({
       "border-bottom": "2px solid #b5b3b3"
     });
@@ -176,13 +176,13 @@ Object.defineProperty(Object.prototype, 'highlightRowTable', {
   enumerable: false
 });
 
-Array.prototype.keySort = function(keys) {
+Array.prototype.keySort = function (keys) {
 
   keys = keys || {};
 
   // via
   // http://stackoverflow.com/questions/5223/length-of-javascript-object-ie-associative-array
-  var obLen = function(obj) {
+  var obLen = function (obj) {
     var size = 0,
       key;
     for (key in obj) {
@@ -195,7 +195,7 @@ Array.prototype.keySort = function(keys) {
   // avoiding using Object.keys because I guess did it have IE8 issues?
   // else var obIx = function(obj, ix){ return Object.keys(obj)[ix]; } or
   // whatever
-  var obIx = function(obj, ix) {
+  var obIx = function (obj, ix) {
     var size = 0,
       key;
     for (key in obj) {
@@ -208,7 +208,7 @@ Array.prototype.keySort = function(keys) {
     return false;
   };
 
-  var keySort = function(a, b, d) {
+  var keySort = function (a, b, d) {
     d = d !== null ? d : 1;
     // a = a.toLowerCase(); // this breaks numbers
     // b = b.toLowerCase();
@@ -228,7 +228,7 @@ Array.prototype.keySort = function(keys) {
       keys[k] == 'desc' || keys[k] == -1 ? -1 : (keys[k] == 'skip' || keys[k] === 0 ? 0 : 1);
   }
 
-  this.sort(function(a, b) {
+  this.sort(function (a, b) {
     var sorted = 0,
       ix = 0;
 
@@ -245,7 +245,7 @@ Array.prototype.keySort = function(keys) {
   return this;
 };
 
-var print = function(obj, delp, delo, ind) {
+var print = function (obj, delp, delo, ind) {
   delp = delp != null ? delp : ""; // property delimeter
   delo = delo != null ? delo : "\n"; // object delimeter
   ind = ind != null ? ind : " "; // indent; ind+ind geometric addition not great for deep objects
