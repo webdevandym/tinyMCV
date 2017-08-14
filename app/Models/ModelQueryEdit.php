@@ -13,7 +13,7 @@ class ModelQueryEdit extends QueryLauncher
     public function addReport($updval)
     {
         foreach ($updval as $value) {
-            if ($value instanceof stdClass) {
+            if ($value instanceof \stdClass) {
                 foreach ($value as $res) {
                     $val['date'][] = $res;
                 }
@@ -23,6 +23,7 @@ class ModelQueryEdit extends QueryLauncher
         }
 
         $val[3] = "'".$val[3]."'";
+        $a = [];
 
         $DBColumns = 'object_id, jobtype_id, user_id, job_descr, job_hours,account_id,job_date';
         $DBColArr = explode(',', $DBColumns);
@@ -32,17 +33,11 @@ class ModelQueryEdit extends QueryLauncher
             $setStat .= $val[$i].',';
         }
 
-        $setStar = substr($setStat, 0, -1);
-
         foreach ($val['date'] as $val) {
-            $value = $this->getSQL('value', __FUNCTION__);
-            $sql = $this->getSQL('query', __FUNCTION__);
-            eval("\$value = \"$value\";");
-            eval("\$sql = \"$sql\";");
+            $sql = "INSERT INTO  proj_jobs WITH (TABLOCKX) ($DBColumns) VALUES($setStat CONVERT(DATETIME,'$val'))";
 
             $this->returnQuery($sql);
         }
-        // echo $sql;
     }
 
     /**********************************************************************/
@@ -79,8 +74,8 @@ class ModelQueryEdit extends QueryLauncher
     {
         $id = $this->chkProp($recToDel, 'rec');
 
-        $sql = $this->getSQL('query', __FUNCTION__);
-        eval("\$sql = \"$sql\";");
+        $sql = "DELETE FROM proj_jobs WITH (TABLOCKX) WHERE id IN ($id)";
+
         $this->returnQuery($sql);
     }
 }

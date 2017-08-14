@@ -3,9 +3,13 @@
 
 var paths = {
     get: 'Query/getdata',
-    reportEditor: './app/Controllers/reportEditeTools.php?method='
+    edit: 'Query/editdata'
   },
-  firstRun = true;
+  firstRun = true,
+  logStatus = true,
+  log = function (str) {
+    if (logStatus) console.log(str);
+  };
 
 Object.prototype.parsetoJSON = function () {
   if (typeof this == 'object') {
@@ -76,3 +80,5 @@ requireDATA.prototype = {
 }
 
 var HttpRequest = new requireDATA();
+
+log('STATUS: Setup install ...')

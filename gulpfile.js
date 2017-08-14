@@ -22,7 +22,7 @@ var paths = {
   cssFile: ['assets/css/**/*.css', '!assets/css/mincss/*.css', '!assets/css/css/advStyles.css']
 };
 
-gulp.task('scss', ['deleteFile'], function() {
+gulp.task('scss', ['deleteFile'], function () {
   var sass = require('gulp-sass');
 
   return gulp.src(paths.sassFiles)
@@ -30,7 +30,7 @@ gulp.task('scss', ['deleteFile'], function() {
     .pipe(gulp.dest(paths.cssDest));
 });
 
-gulp.task('deleteFile', function() {
+gulp.task('deleteFile', function () {
 
   return gulp.src('./assets/css/mincss/**/*.css')
     .pipe(deletefile({
@@ -38,7 +38,7 @@ gulp.task('deleteFile', function() {
     }))
 })
 
-gulp.task('autoprefixer_clear', ['scss'], function() {
+gulp.task('autoprefixer_clear', ['scss'], function () {
   var postcss = require('gulp-postcss');
   var autoprefixer = require('autoprefixer');
 
@@ -51,7 +51,7 @@ gulp.task('autoprefixer_clear', ['scss'], function() {
     .pipe(gulp.dest('./assets/css/mincss/'));
 });
 
-gulp.task('unCSS', ['autoprefixer_clear'], function() {
+gulp.task('unCSS', ['autoprefixer_clear'], function () {
 
   var cssnano = require('gulp-cssnano');
 
@@ -88,7 +88,7 @@ gulp.task('JS', ['compressJS'], () => {
     .pipe(notify("JS -> DONE!!!"));
 })
 
-gulp.task('compressJS', ['concatJS'], function(cb) {
+gulp.task('compressJS', ['concatJS'], function (cb) {
   var pump = require('pump'),
     minify = composer(uglifyjs, console);
 
@@ -148,7 +148,8 @@ gulp.task('deleteJSmin', () => {
   return gulp.src(['./assets/js/min/*.js', './assets/js/babel/*.js'])
     .pipe(deletefile({
       deleteMatch: true
-    }));
+    }))
+    .pipe(wait(250));
 })
 
 gulp.task('reloadPHP', () => {
@@ -158,7 +159,7 @@ gulp.task('reloadPHP', () => {
     .pipe(livereload());
 })
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
   livereload.listen({
     host: '127.0.0.1'
   });

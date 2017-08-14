@@ -85,7 +85,7 @@ function validObjectName(object) {
 }
 
 
-Object.prototype.watchFromJobType = function(checkValue, specRun) {
+Object.prototype.watchFromJobType = function (checkValue, specRun) {
   let disStatus,
     classDest,
     s = specRun;
@@ -98,7 +98,7 @@ Object.prototype.watchFromJobType = function(checkValue, specRun) {
     }
   }
 
-  let switchSlectBlock = function(o) {
+  let switchSlectBlock = function (o) {
       if (['1', '2'].indexOf($(o).children('option:selected').val()) < 0) {
         disStatus = true;
         classDest = 'add';
@@ -128,7 +128,7 @@ Object.prototype.watchFromJobType = function(checkValue, specRun) {
     clThis = this;
 
   if (firstCorrectingRun(this, s)) {
-    $(clThis).change(function() {
+    $(clThis).change(function () {
       switchSlectBlock(clThis);
     })
   }
@@ -146,7 +146,7 @@ function insertNewReport() {
 
 insertNewReport.prototype = {
 
-  install: function() {
+  install: function () {
     this.exitMethod = false;
     this.multiReport = false;
     this.insertVal = {};
@@ -154,7 +154,7 @@ insertNewReport.prototype = {
     return this;
   },
 
-  valid: function() {
+  valid: function () {
     if (this.exitMethod) return this;
     if (!ValidReport(['#hours'], ['#errorHour'])) {
       this.exitMethod = true
@@ -162,7 +162,7 @@ insertNewReport.prototype = {
     return this;
   },
 
-  getValues: function() {
+  getValues: function () {
 
     if (this.exitMethod) return this;
 
@@ -173,7 +173,7 @@ insertNewReport.prototype = {
     if ($('#multiReport').attr('status') == 'on') this.multiReport = true
     //get date
 
-    $('#table-c td.today').each(function(i) {
+    $('#table-c td.today').each(function (i) {
       dateEdit[i] = momentShort(
         new Date(
           (($(this).text() != '') ?
@@ -186,15 +186,15 @@ insertNewReport.prototype = {
     // console.log(dateEdit);
     for (let i = 0; i < idStore.length; i++) {
       switch (idStore[i]) {
-        case 'programmerName':
-          insertVal[i] = $('select#' + idStore[i] + ' option:selected').attr('idnum')
-          break;
-        case 'descrTextTS':
-          insertVal[i] = this.descriptionCreator(idStore[i]);
-          // console.log(insertVal[i]);
-          break;
-        default:
-          insertVal[i] = $('select#' + idStore[i] + ' option:selected').val()
+      case 'programmerName':
+        insertVal[i] = $('select#' + idStore[i] + ' option:selected').attr('idnum')
+        break;
+      case 'descrTextTS':
+        insertVal[i] = this.descriptionCreator(idStore[i]);
+        // console.log(insertVal[i]);
+        break;
+      default:
+        insertVal[i] = $('select#' + idStore[i] + ' option:selected').val()
       }
 
     }
@@ -214,7 +214,7 @@ insertNewReport.prototype = {
     return this;
   },
 
-  descriptionCreator: function(key) {
+  descriptionCreator: function (key) {
     let jopTypeChk;
     if (['1', '2'].indexOf($('#jobType').val()) > -1 && $('#checkDesk').is(':checked')) {
       descr = "[" + $('#objectType option:selected').text() + ($('#objName option:selected').text().toLowerCase() !== '-none-' ? ' => ' + $('#objName option:selected').text() : '') + "]"
@@ -227,28 +227,41 @@ insertNewReport.prototype = {
     return encodeURIComponent((descr + (descrVal != '' ? ((jopTypeChk) ? "\: " : '') + descrVal : '')).quoteString());
   },
 
-  pushData: function() {
+  pushData: function () {
     if (this.exitMethod) return this;
 
     let startOfWeek = momentShort(this.dateEdit[0], 1),
       endOfWeek = momentShort(this.dateEdit[0], 7),
-      userName = $('#programmerName').val()
+      userName = $('#programmerName').val(),
+      data = this.insertVal
 
     $('.buttonAddReport').addClass('success')
 
-    $.get(paths.reportEditor + 'addReport&object=' + this.insertVal.parsetoJSON(), function(data) {
+    HttpRequest.runQuery(paths.edit, {
+        method: 'addReport',
+        data
+      }, (data) => {
         if (data) {
           showSQLError(data);
         }
       })
-      .done(function() {
+      .done(function () {
         returnReportFromDB(userName, startOfWeek, endOfWeek)
       })
+
+    // $.get(paths.reportEditor + 'addReport&object=' + this.insertVal.parsetoJSON(), function (data) {
+    //     if (data) {
+    //       showSQLError(data);
+    //     }
+    //   })
+    //   .done(function () {
+    //     returnReportFromDB(userName, startOfWeek, endOfWeek)
+    //   })
 
     return this;
   },
 
-  closeEvent: function() {
+  closeEvent: function () {
     if (this.exitMethod) return this;
 
     $('.buttonAddReport').addClass('success')

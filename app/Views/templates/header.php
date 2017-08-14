@@ -14,4 +14,4 @@
     <link rel="stylesheet" type="text/css" href="<?php $url->assets('css.mincss.siteStyle-min.css'); ?>" media="bogus">
 </head>
 
-<body class = 'loaded'>
+<body >

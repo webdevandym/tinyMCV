@@ -28,12 +28,10 @@ function putData(clb) {
 
 
   if ($('#jobType')) {
-    // console.log('hi');
-    //let request = new requireDATA();
+
     HttpRequest.runQuery(paths.get, {
       method: 'getJobType',
     }, (data) => {
-
       $('#jobType').html(data);
     })
 
@@ -63,7 +61,7 @@ function putData(clb) {
     })
 }
 
-console.log('STATUS: Ajax request file loaded ...');
+log('STATUS: Ajax request file loaded ...');
 
 let getData4JSON = function (data) {
 
@@ -94,8 +92,8 @@ let getData4JSON = function (data) {
       $(selector)
         .html(store.replace(/^ | $/, ''))
     }
-  })
-}
+  });
+};
 
 
 Object.prototype.getPjName = function (name, editor) {

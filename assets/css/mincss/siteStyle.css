@@ -885,6 +885,9 @@ tr .other {
   text-decoration: inherit;
   cursor: pointer; }
 
+#table-nc .btn.btn-success {
+  height: 32px; }
+
 /*!
  * Datepicker for Bootstrap v1.6.4 (https://github.com/eternicode/bootstrap-datepicker)
  *

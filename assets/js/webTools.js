@@ -139,5 +139,5 @@ var getCookie = (name) => {
 
   $ || document.write('<script src="./assets/js/vendor/jquery-3.2.1.min.js"><\/script>') //jQuery
 
-  console.log('STATUS: Main JS file loaded ...');
+  log('STATUS: Main JS file loaded ...');
 })()
