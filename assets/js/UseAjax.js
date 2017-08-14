@@ -1,7 +1,5 @@
 function putData(clb) {
 
-
-
   // get customer
   HttpRequest.runQuery(paths.get, {
       method: 'getProject',
@@ -36,8 +34,7 @@ function putData(clb) {
       method: 'getJobType',
     }, (data) => {
 
-      $('#jobType')
-        .html(data);
+      $('#jobType').html(data);
     })
 
   }

@@ -24,8 +24,8 @@ $modal = messStore::genLinks(['e' => 'modalEdit', 'd' => 'modalDel'], __ROOT__.'
           <input type="hidden"  id = 'nowDate'>
 
           <div class="dropdown">
-            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-caret-right" aria-hidden="true"></i></button>
-            <ul class="dropdown-menu">
+            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa fa-caret-right" aria-hidden="true"></i></button>
+            <ul class="dropdown-menu" >
               <li id = 'multiDelete' title = "<?php echo $store->label->multiDelete; ?>"><a href = "#">Multi Delete <i class="fa fa-trash" aria-hidden="true"></i> <span class = "ioDeleteOFF"></span></a></li>
               <li id = 'multiReport' title = "<?php echo $store->label->multiReport; ?>"><a href = "#">Quick report <i class="fa fa-files-o" aria-hidden="true"></i><span class = "ioDeleteOFF"></span></a></li>
               <li id = 'lastReport' title = "<?php echo $store->label->lastReport; ?>"><a href = "#">Show last report <i class="fa fa-crosshairs" aria-hidden="true"></i></a></li>

@@ -15,7 +15,10 @@ function returnReportFromDB() {
 
   $('#tableReport th').off()
   // console.log(path)
-  $.get(paths.main + 'getReportWeek&object=' + obj.parsetoJSON(), function(data) {
+  HttpRequest.clear().runQuery(paths.get, {
+    method: 'getReportWeek',
+    data: obj
+  }, (data) => {
     if (clearSpecSymbol(data) != clearSpecSymbol($('#ReportWeek').html())) $('#ReportWeek').html(data)
   }).done(() => {
     if (document.getElementById('tableReport')) {
@@ -24,6 +27,7 @@ function returnReportFromDB() {
       $('#multiDelete').css('display', 'none')
     }
   });
+
 
 
 
@@ -54,7 +58,7 @@ function getDateForDB(dateOfWeek, func) {
     func.call();
   }
 
-  $('#table-c td').on('click', function() {
+  $('#table-c td').on('click', function () {
     if ($(this).html() != '-') {
 
       toggleSelectElemetnTable(true)
@@ -101,3 +105,5 @@ function getCurentReport(name, date) {
   returnReportFromDB(userName, startOfWeek, endOfWeek)
 
 };
+
+console.log('STATUS: Report worker loaded ... ');

@@ -11,7 +11,6 @@ class QueryLauncher extends QueryModel
     {
         $this->method = $this->chkProp($request, 'method') ? $request->method : $request;
         $this->transfVal = $this->chkProp($request, 'data');
-        // throw new \Exception(print_r($request));
     }
 
     public function runVisiter()
@@ -38,12 +37,6 @@ class QueryLauncher extends QueryModel
         if (!method_exists($this, $this->method)) {
             die();
         }
-
-        // if (is_array($res)) {
-        //     foreach ($res as $key => $value) {
-        //         echo $value;
-        //     }
-        // }
 
         return  $this->runQuery($this->method, $this->transfVal, function () { $this->db->close(); });
     }

@@ -144,7 +144,7 @@ class ModelQueryGet extends QueryLauncher
 
         foreach ($result as $row) {
             $table .= <<<_END
-	<tr id = "it{$row->id}_{$row['object_id']}">
+	<tr id = "it{$row->id}_{$row->object_id}">
   <td colspan = '2' class = 'chekerDelete' delrec = ''><i class="fa fa-chevron-down " aria-hidden="true"></i></td>
 	<td class = 'editRow' data-toggle="modal" data-target="#editModal" onclick = "insertData(this)"><i class="fa fa-pencil" aria-hidden="true"></i></td>
 	<td class = 'deleteRow' data-toggle="modal" data-target="#deleteModal" onclick = "getTDID(this);"><i class="fa fa-times" aria-hidden="true"></i></td>
@@ -152,12 +152,12 @@ _END;
 
             foreach ($a as $item) {
                 if ($item === 'hoursJob') {
-                    $row[$item] = (float) $row[$item];
+                    $row->$item = (float) $row->$item;
                 }
                 if ($item === 'name') {
-                    $table .= "<td class = '$item'>".str_replace('/ /', '', $row[$item])."<br><span id = 'custStyle'>".$row['customer'].'</span></td>';
+                    $table .= "<td class = '$item'>".str_replace('/ /', '', $row->$item)."<br><span id = 'custStyle'>".$row->customer.'</span></td>';
                 } else {
-                    $table .= "<td class = '$item'>".$row[$item].'</td>';
+                    $table .= "<td class = '$item'>".$row->$item.'</td>';
                 }
             }
             $table .= '</tr>';
@@ -198,17 +198,30 @@ _END;
 	</div>
 
 	<script>
-		tableSortAlg()
-		tableMassDeletePicker()
+		tableSortAlg();
+		tableMassDeletePicker();
 		function returnDate() {
     		return "$retDate";
-		}
+		};
 	</script>
 _END;
     }
+
+    /**********************************************************************/
+    /*************************getLastReport***********************************/
+    /**********************************************************************/
+
+    protected function getLastReport($val)
+    {
+        $user = $this->chkProp($val, 'name');
+
+        $query = "SELECT max(distinct job_date) as maxdate
+              			FROM proj_jobs
+              			WHERE user_id IN (
+              						SELECT id FROM proj_users WHERE name = '$user')";
+
+        $result = $this->returnQuery($query);
+
+        return reset($result)->maxdate;
+    }
 }
-//
-// $getResult = new selectBlockConnector();
-// $getResult
-//     ->auto()
-//     ->runVisiter();

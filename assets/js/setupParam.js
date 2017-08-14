@@ -68,6 +68,10 @@ requireDATA.prototype = {
       return false;
     }
     return true;
+  },
+
+  clear: function (val) {
+    return this.stat.resolve(val || ''), this;
   }
 }
 

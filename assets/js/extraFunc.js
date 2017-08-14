@@ -3,7 +3,7 @@ function extrafunc() {
 
   //click menu mass delete
 
-  $('#multiDelete').on('click', function(e) {
+  $('#multiDelete').on('click', function (e) {
     e.preventDefault()
     if ($('#multiReport').attr('status') == 'on') {
       disableMultiReport($('#multiReport'))
@@ -12,7 +12,7 @@ function extrafunc() {
     toggleSelectElemetnTable()
   });
 
-  $('#lastReport').on('click', function(e) {
+  $('#lastReport').on('click', function (e) {
     e.preventDefault()
     getLastReport()
   });
@@ -20,7 +20,7 @@ function extrafunc() {
 
   todayReruner()
 
-  $('#multiReport').on('click', function(e) {
+  $('#multiReport').on('click', function (e) {
     e.preventDefault()
 
     if ($(this).attr('status') == 'on') {
@@ -41,7 +41,7 @@ function extrafunc() {
     }
   });
 
-  $('#closeError').on('click', function() {
+  $('#closeError').on('click', function () {
     $(this).parent('div').css('visibility', 'hidden').removeClass('show')
   });
 
@@ -49,7 +49,7 @@ function extrafunc() {
 
 function todayReruner() {
   $('#today').off();
-  $('#today').on('click', function() {
+  $('#today').on('click', function () {
 
     showNowDay();
   });
@@ -76,23 +76,25 @@ function getLastReport() {
 
   }
 
-  $.get(valStore.path + 'getLastReport.php?name=' + valStore.userName, (data) => {
-    console.log(data);
-    let date = data.split(' ')[0],
-      nowDate = momentShort(new Date($('#calendar-box').attr('data-year') + "-" + todayMonthFromCalend() + "-" + $('#table-c td.today').html()));
+  HttpRequest.runQuery(paths.get, {
+      method: 'getLastReport',
+      data: {
+        name: $('#programmerName option:selected').val()
+      }
+    }, (data) => {
+      let date = data.split(' ')[0],
+        nowDate = momentShort(new Date($('#calendar-box').attr('data-year') + "-" + todayMonthFromCalend() + "-" + $('#table-c td.today').html()));
 
-    if (nowDate != new Date(date).toJSON().split("T")[0]) {
+      if (nowDate != new Date(date).toJSON().split("T")[0]) {
 
-      renderCalendar(date)
-    }
-
-  }).done(() => {
-    getCurentReport(valStore.userName, 'getCalendar')
-  }).done((data) => {
-    showNotify('Your last record: ' + data.split(' ')[0], wait);
-
-  })
-
+        renderCalendar(date)
+      }
+    })
+    .done(() => {
+      getCurentReport(valStore.userName, 'getCalendar')
+    }).done((data) => {
+      showNotify('Your last record: ' + data.split(' ')[0], wait);
+    })
 }
 
 function disableMultiReport(obj) {
@@ -105,7 +107,7 @@ function disableMultiReport(obj) {
 
 function takeMyDate() {
   $('#table-c td').removeClass('today')
-  $('#table-c td').each(function() {
+  $('#table-c td').each(function () {
     if ($(this).text() == $('#nowDate').val()) {
       $(this).addClass('today')
     }
@@ -143,13 +145,13 @@ function toggleSelectElemetnTable(way) {
 }
 
 function pickMultiReport() {
-  $('#table-c td').on('click', function() {
+  $('#table-c td').on('click', function () {
     $(this).hasClass('today') ? $(this).removeClass('today') : $(this).addClass('today');
   });
 }
 
 function tableMassDeletePicker() {
-  $('#tableReport tbody tr').on('click', function() {
+  $('#tableReport tbody tr').on('click', function () {
     let visElem;
     if ($('#multiDelete span').attr('class') == 'ioDeleteON') {
       $(this).find('td.chekerDelete i').css('visibility') == 'visible' ? visElem = 'hidden' : visElem = 'visible'
@@ -160,7 +162,7 @@ function tableMassDeletePicker() {
 
 function genDeleteList() {
   let deList = '';
-  $('#tableReport tr').each(function() {
+  $('#tableReport tr').each(function () {
     if ($(this).find('.chekerDelete i').css('visibility') == 'visible') {
       deList += $(this).attr('id').split('_')[0].split('it')[1] + ",";
     }
@@ -174,9 +176,9 @@ function genDeleteList() {
     $('#flashSelect').removeClass('btn-info').addClass('btn-primary')
   }
 
-  $.get(paths.reportEditor + 'removeRecord&object=' + record.parsetoJSON(), function(data) {
+  $.get(paths.reportEditor + 'removeRecord&object=' + record.parsetoJSON(), function (data) {
 
-  }).done(function() {
+  }).done(function () {
     toggleSelectElemetnTable()
     returnReportFromDB(returnDate())
   }).done(() => {
@@ -197,7 +199,7 @@ function flashSelectRecords() {
   }
 }
 
-String.prototype.quoteString = function(specChar) {
+String.prototype.quoteString = function (specChar) {
 
   let pattern = /(\\)/g
 

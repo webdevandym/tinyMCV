@@ -19,17 +19,17 @@ var getCookie = (name) => {
       }, (data) => {
         $('.inputHere').html(data)
       })
-      .done(function() {
+      .done(function () {
 
         putData(
-          /*() => {
-                timeSheetRunEvent(page)
-              }*/
+          () => {
+            timeSheetRunEvent(page)
+          }
         )
-        //
-        // $('#programmerName').change(function() {
-        //   getCurentReport($(this).val(), 'getCalendar')
-        // })
+
+        $('#programmerName').change(function () {
+          getCurentReport($(this).val(), 'getCalendar')
+        })
       });
 
   },
@@ -118,7 +118,7 @@ var getCookie = (name) => {
     context.fillStyle = color
     draw();
 
-    setInterval(function() {
+    setInterval(function () {
       date = new Date()
       context.clearRect(0, 0, canvas.width, canvas.height);
       draw();
@@ -130,10 +130,10 @@ var getCookie = (name) => {
   };
 
 
-(function() {
+(function () {
   renderWeb()
 
-  $(".nav li a").click(function(e) {
+  $(".nav li a").click(function (e) {
     e.preventDefault();
   });
 
