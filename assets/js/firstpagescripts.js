@@ -2,7 +2,7 @@ function O(i) {
   return typeof i == 'object' ? i : document.getElementById(i)
 }
 
-let paintCanvas = function() {
+let paintCanvas = function () {
 
   var canvas = O('logo'),
     context = canvas.getContext('2d'),
@@ -11,7 +11,7 @@ let paintCanvas = function() {
 
   image.src = './assets/image/ico-leaf.png'
 
-  window.onload = function() {
+  window.onload = function () {
 
     context.font = 'bold italic 70px "PT Sans"'
     context.textBaseline = 'top'
@@ -32,19 +32,20 @@ function requireDATA() {
 }
 
 requireDATA.prototype = {
-  runQuery: function(url, obj, f) {
+  runQuery: function (url, obj, f) {
 
     let json = $.parseJSON(JSON.stringify(obj));
 
     $.ajax({
       type: "POST",
       url: url,
-      dataType: "JSON",
+      // dataType: "JSON",
       data: json,
-      error: function(xhr, b, c) {
+      error: function (xhr, b, c) {
         console.log("xhr=" + xhr + " b=" + b + " c=" + c);
       },
       success: (data) => {
+        console.log(data);
         if (typeof f == 'function') {
           f(this.IsJsonString(data) ? JSON.parse(data) : data);
         }
@@ -56,7 +57,7 @@ requireDATA.prototype = {
   },
 
 
-  done: function(f) {
+  done: function (f) {
     this.stat.promise().done(() => {
       f();
       return this;
@@ -75,16 +76,16 @@ requireDATA.prototype = {
 
 let request = new requireDATA();
 
-$('.loginInput').on('blur', function() {
+$('.loginInput').on('blur', function () {
   request.runQuery("Uservalid/Validate", {
       user: encodeURIComponent($('.loginInput').val())
     },
-    function(data) {
+    function (data) {
       $('#loginChecker').html(data)
     });
 })
 
-$(".loginInput").keypress(function(event) {
+$(".loginInput").keypress(function (event) {
   if (event.which == 13 && $(this).val() != '') {
     event.preventDefault();
     checkAndLogin()
@@ -92,7 +93,7 @@ $(".loginInput").keypress(function(event) {
 });
 
 
-$('.submitLogin').on('click', function() {
+$('.submitLogin').on('click', function () {
   checkAndLogin()
 })
 
@@ -106,7 +107,7 @@ function checkAndLogin() {
         user: encodeURIComponent($('.loginInput').val()),
         sendResult: true
       },
-      function(data) {
+      function (data) {
         console.log(data);
         if (data != false) {
           location.reload();

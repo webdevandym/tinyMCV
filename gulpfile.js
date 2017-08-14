@@ -137,6 +137,7 @@ gulp.task('babel', ['deleteJSmin'], () => {
   const babel = require('gulp-babel');
 
   return gulp.src([paths.jsLoc, '!assets/js/moments.js'])
+    .pipe(wait(150))
     .pipe(babel({
       presets: ['es2015']
     }))

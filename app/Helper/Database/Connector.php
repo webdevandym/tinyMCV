@@ -82,10 +82,10 @@ class Connector
     {
         if (empty($db)) {
             $url = new \app\Helper\Http\UrlHelper();
-
+            $link = $url->assets('css.mincss.siteStyle-min.css', true, true);
             echo <<<__END
     <head>
-         <link rel="stylesheet" type="text/css" href="$url->assets('css.mincss.siteStyle-min.css'); ?>">
+         <link rel="stylesheet" type="text/css" href="$link">
          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
     </head>
     <body>

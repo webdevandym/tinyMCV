@@ -99,6 +99,8 @@ Object.prototype.watchFromJobType = function (checkValue, specRun) {
   }
 
   let switchSlectBlock = function (o) {
+      // log(['1', '2'].indexOf($(o).children('option:selected').val()) < 0);
+      // log($(o).children('option:selected').val())
       if (['1', '2'].indexOf($(o).children('option:selected').val()) < 0) {
         disStatus = true;
         classDest = 'add';

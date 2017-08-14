@@ -19,6 +19,7 @@ class Route
 
         static::$host = $url->url();
         $requet = str_replace('/'.$url->getSubFold(), '', $_SERVER['REQUEST_URI']);
+
         $detectPath = (substr_count(static::$host, '/') > 3) ? 2 : 1;
         $routes = explode('/', $requet);
 

@@ -61,8 +61,8 @@ class ModelQueryEdit extends QueryLauncher
 
         $setStat = substr($setStat, 0, -1);
 
-        $sql = $this->getSQL('query', __FUNCTION__);
-        eval("\$sql = \"$sql\";");
+        $sql = "UPDATE proj_jobs WITH (TABLOCKX) SET $setStat WHERE id = '$specVal[0]'";
+
         $this->returnQuery($sql);
     }
 

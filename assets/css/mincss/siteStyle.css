@@ -11,7 +11,8 @@
 .buttonWraper {
   display: inline-block;
   position: relative;
-  width: 150px; }
+  width: 150px;
+  padding-right: 20px; }
 
 .buttonWraper_delete {
   display: none;

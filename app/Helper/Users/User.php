@@ -118,13 +118,13 @@ class User
                     return true;
                 }
             } catch (\Exception $e) {
-                echo $e->getMessage();
+                return $e->getMessage();
             }
         };
 
-        if ($_SESSION !== null || $_COOKIE !== null) {
+        if (isset($_SESSION['user']) || isset($_COOKIE['user'])) {
             if ($destroySession($excl)) {
-                echo "<script>window.location.href = '.';</script>";
+                return true;
             }
         }
     }

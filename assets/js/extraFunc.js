@@ -173,24 +173,29 @@ function genDeleteList() {
   if ($('#flashSelect').hasClass('btn-info')) {
     $('#flashSelect').removeClass('btn-info').addClass('btn-primary')
   }
+  if (deList != '') {
+    HttpRequest.runQuery(paths.edit, {
+        method: 'removeRecord',
+        data: {
+          rec: deList.substring(0, deList.length - 1)
+        }
+      }, (data) => {
+        if (data) {
+          showSQLError(data);
+        }
+      })
+      .done(function () {
+        toggleSelectElemetnTable()
+        returnReportFromDB(returnDate())
+      }).done(() => {
+        showNotify('Deleting successful', wait);
 
-  HttpRequest.clear().runQuery(paths.edit, {
-      method: 'removeRecord',
-      data: {
-        rec: deList.substring(0, deList.length - 1)
-      }
-    }, (data) => {
-      if (data) {
-        showSQLError(data);
-      }
-    })
-    .done(function () {
-      toggleSelectElemetnTable()
-      returnReportFromDB(returnDate())
-    }).done(() => {
-      showNotify('Deleting successful', wait);
+      })
+  } else {
+    toggleSelectElemetnTable();
+    showNotify('Nothing to deleting!', wait)
+  }
 
-    })
 
   // console.log(deList)
 }

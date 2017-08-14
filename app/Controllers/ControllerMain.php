@@ -23,6 +23,13 @@ class ControllerMain extends Controller
         $this->{$data->page}($data, $request);
     }
 
+    public function actionLogout(Request $request)
+    {
+        $res = \app\Helper\Users\User::destroySESSION();
+
+        return Response::json($res);
+    }
+
     private function main(\stdClass $data)
     {
         $this->view->generate('main.php', 'maintemplate.php', $data);

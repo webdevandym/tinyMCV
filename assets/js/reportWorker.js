@@ -15,7 +15,7 @@ function returnReportFromDB() {
 
   $('#tableReport th').off()
   // console.log(path)
-  HttpRequest.clear().runQuery(paths.get, {
+  HttpRequest.runQuery(paths.get, {
     method: 'getReportWeek',
     data: obj
   }, (data) => {

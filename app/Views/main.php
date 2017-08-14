@@ -20,5 +20,3 @@
     <br>
   </div>
 </div>
-
-<?php echo $data->page; ?>

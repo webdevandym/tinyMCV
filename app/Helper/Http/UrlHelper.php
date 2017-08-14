@@ -8,10 +8,12 @@ Help to include files, link Assets etc. */
 class UrlHelper
 {
     protected $url;
+    protected $subfolder;
 
-    public function __construct()
+    public function __construct($subfolder = '/tinyMCV')
     {
-        $this->url = 'http://'.$_SERVER['HTTP_HOST'].$this->getSubFold().'/';
+        $this->subfolder = $subfolder;
+        $this->url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$subfolder.'/';
     }
 
     public function assets($file, $conv = true, $return = false)
@@ -38,9 +40,7 @@ class UrlHelper
 
     public function getSubFold()
     {
-        preg_match('/(\/\w+)\//', $_SERVER['SCRIPT_NAME'], $match);
-
-        return $match[1] ? $match[1] : '';
+        return $this->subfolder;
     }
 
     private function coolLink($link)

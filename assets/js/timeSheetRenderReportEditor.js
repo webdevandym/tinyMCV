@@ -61,83 +61,86 @@ function insertData(object) {
 
   $('#objectType_m').html($('#objectType').html());
   //get customer info;
-  $.get(paths.main + 'getProject&object=' + {
-      query: 'Customer',
-      switch: $(parent).find('td.name span').html()
-    }.parsetoJSON(), function (data) {
+
+  HttpRequest.runQuery(paths.get, {
+      method: 'getProject',
+      data: {
+        query: 'Customer',
+        switch: $(parent).find('td.name span').html()
+      }
+    }, function (data) {
       $('#editModal select#customer').html(data)
-    })
-    .done(() => {
-
-
-      storeobj = {
-        getProject: {
-          id: "name",
-          obj: {
-            query: $('select#customer option:selected').val(),
-            switch: $('select#name option').html()
-          }
-        },
-        getUserName: {
-          id: "userName",
-          obj: {
-            edit: $('select#userName option').val()
-          }
-        }
-      };
-
-
-      // HttpRequest.runQuery(paths.main, storeobj)
-
-      //  $('select#userName').html($(''));
-
-      let select = $(parent).find('td.jobType').html()
-      $('select#jobType_m').html($('#jobType').html())
-      $("select#jobType_m option:contains(\'" + select.replace(/^ | $/, '') + "\')").attr('selected', true);
-
-      $("#customer").change(function () {
-        $('#name').getPjName($('select#customer option:selected').val(), 1)
-      });
-
     })
     .done(function () {
 
-      var ProjectItems = ['#name', '#objectType_m'];
+      HttpRequest.runQuery(paths.get, {
+          getProject: {
+            id: "name",
+            data: {
+              query: $('select#customer option:selected').val(),
+              switch: $('select#name option').html()
+            }
+          },
+          getUserName: {
+            id: "userName",
+            data: {
+              edit: $('select#userName option').val()
+            }
+          }
+        }, function (data) {
 
-      for (let i = 0; i < ProjectItems.length; i++) {
+          getData4JSON(data)
 
-        $(ProjectItems[i]).change(function () {
-          getObjName(false, "#objNameTS_m", {
-            name: $('#name option:selected').val(),
-            type: $('#objectType_m option:selected').val()
+          let select = $(parent).find('td.jobType').html()
+          $('select#jobType_m').html($('#jobType').html())
+          $("select#jobType_m option:contains(\'" + select.replace(/^ | $/, '') + "\')").attr('selected', true);
+
+          $("#customer").change(function () {
+            $('#name').getPjName($('select#customer option:selected').val(), 1)
           });
+
         })
-      }
-    })
-    .done(() => {
-      let descFull = $('#descr').val(),
-        descPartText = descFull.indexOf(':') > 0 ? descFull.substring(descFull.indexOf(':') + 2) : descFull.indexOf(']') < 0 ? descFull : '',
-        descrPartObject = descFull.indexOf(']') > 0 ? descFull.substring(1, descFull.indexOf(']')) : '',
-        ObjectTypeName = descrPartObject.split('=>') || '';
 
-      $('#descr').val(descPartText)
-
-      var work = new objectWorker(ObjectTypeName)
-
-      work.getObjTypeEditor()
         .done(function () {
-          this.getObjNameEditor()
-            .done(() => {
-              $('#jobType_m').watchFromJobType(['#objectType_m', '#objNameTS_m'], true)
+
+          var ProjectItems = ['#name', '#objectType_m'];
+
+          for (let i = 0; i < ProjectItems.length; i++) {
+
+            $(ProjectItems[i]).change(function () {
+              getObjName(false, "#objNameTS_m", {
+                name: $('#name option:selected').val(),
+                type: $('#objectType_m option:selected').val()
+              });
             })
-        }),
-        //get picked calendar;
-        $('#editModal .modal-body input#dateJob').datepicker({
-          format: "yyyy-mm-dd",
-          language: "en",
-          todayHighlight: true,
-        });
-    });
+          }
+
+          let descFull = $('#descr').val(),
+            descPartText = descFull.indexOf(':') > 0 ? descFull.substring(descFull.indexOf(':') + 2) : descFull.indexOf(']') < 0 ? descFull : '',
+            descrPartObject = descFull.indexOf(']') > 0 ? descFull.substring(1, descFull.indexOf(']')) : '',
+            ObjectTypeName = descrPartObject.split('=>') || '';
+
+          $('#descr').val(descPartText)
+
+          var work = new objectWorker(ObjectTypeName)
+
+          work.getObjTypeEditor()
+            .done(function () {
+              this.getObjNameEditor()
+                .done(() => {
+                  $('#jobType_m').watchFromJobType(['#objectType_m', '#objNameTS_m'], true)
+                })
+
+            }),
+            //get picked calendar;
+            $('#editModal .modal-body input#dateJob').datepicker({
+              format: "yyyy-mm-dd",
+              language: "en",
+              todayHighlight: true,
+            });
+
+        })
+    })
 }
 
 function objectWorker(val) {
@@ -154,8 +157,8 @@ objectWorker.prototype = {
     $('#objectType_m option:contains(' + objType.replace(/^ | $/, '') + ')').attr('selected', true)
 
     if (this._val[1] == undefined) this.doIt = false;
-    this.stat.resolve('and')
-    if (this.getObName()) return this;
+
+    if (this.getObName()) return this.stat.resolve('and'), this;
   },
 
   getObName: function () {
@@ -172,8 +175,8 @@ objectWorker.prototype = {
     this.doIt && this.wait(200, function () {
       $("#objNameTS_m option:contains(\'" + _this._val[1].replace(/^ | $/, '') + "\')").attr('selected', true);
     });
-    this.stat.resolve('and')
-    return this;
+
+    return this.stat.resolve('and'), this;
   },
 
   wait: (t, f) => {
@@ -184,7 +187,7 @@ objectWorker.prototype = {
   },
 
   done: function (f) {
-    this.stat.promise().done(() => {
+    return this.stat.promise().done(() => {
       f.call(this);
       return this;
     })
@@ -231,8 +234,12 @@ ReportEditTool.prototype = {
           }
         };
 
+        let data = a;
         this.wait(200, () => {
-            $.get(paths.reportEditor + 'UpDateDB&object=' + a.parsetoJSON(), function (data) {
+            HttpRequest.runQuery(paths.edit, {
+              method: 'UpDateDB',
+              data
+            }, (data) => {
               showSQLError(data);
             }).done(function () {
               returnReportFromDB(returnDate())
@@ -278,7 +285,7 @@ ReportEditTool.prototype = {
 
 
 
-      HttpRequest.clear().runQuery(paths.edit, {
+      HttpRequest.runQuery(paths.edit, {
           method: 'removeRecord',
           data: {
             rec: $('#deleteModal #hiddenVal').val()
@@ -294,13 +301,6 @@ ReportEditTool.prototype = {
           })
         })
 
-      // $.get(paths.reportEditor + 'removeRecord&object=' + id.parsetoJSON(), (data) => {
-      //   showSQLError(data);
-      // }).done(() => {
-      //   _this.wait(200, function() {
-      //     returnReportFromDB(returnDate());
-      //   })
-      // })
 
       this.wait(300, function () {
           $('#deleteModal').modal('hide');

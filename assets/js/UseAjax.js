@@ -1,4 +1,4 @@
-function putData(clb) {
+var putData = function (clb) {
 
   // get customer
   HttpRequest.runQuery(paths.get, {
@@ -89,8 +89,7 @@ let getData4JSON = function (data) {
 
       store = store || v.val;
 
-      $(selector)
-        .html(store.replace(/^ | $/, ''))
+      $(selector).html(store.replace(/^ | $/, ''))
     }
   });
 };

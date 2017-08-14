@@ -65,7 +65,7 @@ class ModelQueryGet extends QueryLauncher
         $result = $this->cacheData(24 * 60 * 60, $sql, $switcher);
 
         $showName = !empty($switcher) ? 'name' : 'f_name';
-        $getTask = !empty($switcher) ? $switch : $_SESSION['user'];
+        $getTask = !empty($switcher) ? $switcher : $_SESSION['user'];
 
         $a = [];
 
@@ -154,6 +154,9 @@ _END;
                 if ($item === 'hoursJob') {
                     $row->$item = (float) $row->$item;
                 }
+
+                $row->$item = html_entity_decode($row->$item);
+
                 if ($item === 'name') {
                     $table .= "<td class = '$item'>".str_replace('/ /', '', $row->$item)."<br><span id = 'custStyle'>".$row->customer.'</span></td>';
                 } else {

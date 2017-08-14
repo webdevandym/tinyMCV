@@ -16,14 +16,14 @@ class ModelUservalid extends Model
     {
         if (isset($userInfo->user)) {
             $user = User::ValidUser($userInfo->user);
-            $userN = property_exists($user, 'name') ? $user->name : '';
+            $userN = isset($user->name) ? $user->name : '';
 
             if (!isset($userInfo->sendResult)) {
                 if (!$userN) {
-                    return $response['incorrect'];
+                    return $this->response['incorrect'];
                 }
 
-                return $response['correct'];
+                return $this->response['correct'];
             }
 
             if (!empty($userN)) {

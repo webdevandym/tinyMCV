@@ -19,7 +19,7 @@
             <li class = 'menuBorder' ></li>
             <li><a href="timeSheet" onclick="renderWeb($(this).attr('href'));"><i class="fa fa-clock-o"></i> Time Sheet</a></li>
             <li><a href="content" onclick="renderWeb($(this).attr('href'));"><i class="fa fa-users"></i> Tracker</a></li>
-            <!-- <li><a href="#" onclick="$.get('<?php //echo $basePath;?>core/loginControler/logout.php',(data) =>{$('body').html(data)})"><i class="fa fa-external-link"></i> Log out</a></li> -->
+            <li><a href="#" onclick="HttpRequest.runQuery('main/logout', {page:'logOut'},(data) => {if ((data) === true){location.reload();} });"><i class="fa fa-external-link"></i> Log out</a></li>
 
         </ul>
 
