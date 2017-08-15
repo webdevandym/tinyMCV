@@ -58,7 +58,7 @@ Change Log:
 ***
 2.2.2.1 build 32 [26.06.17]
 >Update lang.json  
->Define `\_\_ROOT\_\_` var  
+>Define `__ROOT__` var  
 >micro fix code...
 >Refactoring messStore class.  
 ***

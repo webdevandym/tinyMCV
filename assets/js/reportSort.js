@@ -164,7 +164,7 @@ Object.prototype.highlightRowTable = function (colName) {
 
   let alltimeChar = alltime > 40 ? (alltime + ' h (OverTime: ' + (alltime - 40) + ' h)') : alltime + " h",
     tableOffset = $('#tableReport tbody').offset().left + $('#tableReport tbody').outerWidth() - (alltime > 40 ? 230 : 120),
-    allHStyle = "position: absolute;text-shadow:0px 1px 1px white;color:grey;font-size:14px;margin-top:5px;left:" + tableOffset + "px;content:'Hours summ: " + alltimeChar + "';font-family: FontAwesome;font-style: normal;font-weight: bold;text-decoration: inherit;";
+    allHStyle = "position: absolute;text-shadow:0px 1px 1px white;color:grey;font-size:14px;margin-top:5px;left:" + tableOffset + "px;content:'Total hours: " + alltimeChar + "';font-family: FontAwesome;font-style: normal;font-weight: bold;text-decoration: inherit;";
 
 
   $('<style>#tableReport tbody:after{' + allHStyle + '}</style>').appendTo('head');

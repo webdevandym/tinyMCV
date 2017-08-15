@@ -19,7 +19,8 @@ function returnReportFromDB() {
     method: 'getReportWeek',
     data: obj
   }, (data) => {
-    if (clearSpecSymbol(data) != clearSpecSymbol($('#ReportWeek').html())) $('#ReportWeek').html(data)
+    // console.log(clearSpecSymbol(data), clearSpecSymbol($('#ReportWeek').html()));
+    if (clearSpecSymbol(data, true) !== clearSpecSymbol($('#ReportWeek').html())) $('#ReportWeek').html(data)
   }).done(() => {
     if (document.getElementById('tableReport')) {
       $('#multiDelete').css('display', 'initial')
@@ -31,8 +32,13 @@ function returnReportFromDB() {
 
 
 
-  function clearSpecSymbol(val) {
-    return val.replace(/[^\w]/g, '').toLowerCase();
+  function clearSpecSymbol(val, spec) {
+    val = val.replace(/[^\w]/g, '').toLowerCase();
+    if (spec) {
+      val = val.replace(/\Bdiv$/, '')
+    }
+
+    return val;
   }
 }
 

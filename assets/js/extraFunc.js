@@ -92,6 +92,7 @@ function getLastReport() {
     })
     .done(() => {
       getCurentReport(valStore.userName, 'getCalendar')
+      todayReruner()
     }).done((data) => {
       showNotify('Your last record: ' + data.split(' ')[0], wait);
     })

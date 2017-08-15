@@ -109,6 +109,27 @@ abstract class QueryModel extends Model
         return false;
     }
 
+    public function changeCharSet($val, $in = 'cp1251', $out = 'utf-8')
+    {
+        if (is_array($val) || is_object($val)) {
+            foreach ($val as $key => $value) {
+                if (is_array($value) || is_object($value)) {
+                    $this->changeCharSet($value);
+                } else {
+                    if (is_object($value)) {
+                        $val->$key = mb_convert_encoding($val->$key, $out, $in);
+                    } else {
+                        $val[$key] = mb_convert_encoding($val[$key], $out, $in);
+                    }
+                }
+            }
+
+            return $val;
+        }
+
+        return $val = mb_convert_encoding($val, $out, $in);
+    }
+
     protected function log($key, $res)
     {
         if (isset($this->logDir)) {

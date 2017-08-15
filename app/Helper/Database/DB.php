@@ -44,7 +44,7 @@ class DB extends Connector
             $level = 2;
         }
 
-        $log = new logHTMLAdv($flink, $context, true, $templFile, 'Europe/Kiev');
+        $log = new logHTMLAdv($flink, $context, true, $templFile, getenv('CUR_LOCATION'));
         $log->writeLog();
 
         if (empty($result)) {

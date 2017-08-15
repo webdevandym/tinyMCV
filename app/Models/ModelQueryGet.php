@@ -142,6 +142,12 @@ class ModelQueryGet extends QueryLauncher
 
         $out .= "<div class='container'>";
 
+        if (!isset($result[0]->id)) {
+            return "<div id = 'noRecords' class ='alert alert-success'><span>No Records</span></div></div>";
+        }
+
+        $result = $this->changeCharSet($result);
+
         foreach ($result as $row) {
             $table .= <<<_END
 	<tr id = "it{$row->id}_{$row->object_id}">
@@ -166,7 +172,7 @@ _END;
             $table .= '</tr>';
         }
 
-        if ($table) {
+        if (!empty($table)) {
             if (empty($title)) {
                 $linkDomText = __ROOT__.'/app/Views/templates/langContent/tsDOMText';
                 $title = messStore::genLinks('reportTitle', $linkDomText, true);

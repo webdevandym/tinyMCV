@@ -37,7 +37,7 @@ requireDATA.prototype = {
     return $.ajax({
       type: "POST",
       url: url,
-      dataType: "JSON",
+      // dataType: "JSON",
       data: json,
       error: function (xhr, b, c) {
         console.log("xhr=" + xhr + " b=" + b + " c=" + c);
