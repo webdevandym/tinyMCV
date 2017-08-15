@@ -18,7 +18,7 @@
             <li><a href="#" onclick="refrSwitch();$('body').removeClass('loaded');" id='refreshPage'><i class="fa fa-refresh" aria-hidden="true"></i></a> </li>
             <li class = 'menuBorder' ></li>
             <li><a href="timeSheet" onclick="renderWeb($(this).attr('href'));"><i class="fa fa-clock-o"></i> Time Sheet</a></li>
-            <li><a href="content" onclick="renderWeb($(this).attr('href'));"><i class="fa fa-users"></i> Tracker</a></li>
+            <!-- <li><a href="content" onclick="renderWeb($(this).attr('href'));"><i class="fa fa-users"></i> Tracker</a></li> -->
             <li><a href="#" onclick="HttpRequest.runQuery('main/logout', null,(data) => {if ((data) === true){location.reload();} });"><i class="fa fa-external-link"></i> Log out</a></li>
 
         </ul>
