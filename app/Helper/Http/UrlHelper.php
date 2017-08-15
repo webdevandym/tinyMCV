@@ -10,10 +10,9 @@ class UrlHelper
     protected $url;
     protected $subfolder;
 
-    public function __construct($subfolder = '/tinyMCV')
+    public function __construct()
     {
-        $this->subfolder = $subfolder;
-        $this->url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$subfolder.'/';
+        $this->url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].getenv('URL_SUBFOLDER').'/';
     }
 
     public function assets($file, $conv = true, $return = false)
@@ -40,7 +39,7 @@ class UrlHelper
 
     public function getSubFold()
     {
-        return $this->subfolder;
+        return getenv('URL_SUBFOLDER');
     }
 
     private function coolLink($link)
