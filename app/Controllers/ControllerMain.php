@@ -25,9 +25,7 @@ class ControllerMain extends Controller
 
     public function actionLogout(Request $request)
     {
-        $res = \app\Helper\Users\User::destroySESSION();
-
-        return Response::json($res);
+        return Response::json(\app\Helper\Users\User::destroySESSION());
     }
 
     private function main(\stdClass $data)

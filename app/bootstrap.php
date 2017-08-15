@@ -1,16 +1,13 @@
 <?php
 
-namespace core;
+namespace app;
 
-// require_once 'core/Model.php';
-// require_once 'core/View.php';
-// require_once 'core/Controller.php';
-// require_once 'core/route.php';
-require_once 'Helper/Autoloader.php';
+$loader = require_once __ROOT__.'/vendor/autoload.php';
+$loader->addPsr4('app\\', __ROOT__.'/app/');
 
-use app\core\Controller;
-use app\core\Model;
+$dotenv = new \Dotenv\Dotenv(__ROOT__);
+$dotenv->load();
+
 use app\core\Route;
-use app\core\View;
 
 Route::start();

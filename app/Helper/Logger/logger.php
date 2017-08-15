@@ -29,7 +29,7 @@ abstract class logger
         $this->maxsize = $maxsize;
         $this->levelclass = $levelclass;
         $this->levelmethod = $levelmethod;
-        date_default_timezone_set($timeZone ? $timeZone : 'UTC');
+        date_default_timezone_set($timeZone ? $timeZone : getenv('CUR_LOCATION'));
     }
 
     abstract public function writeLog();

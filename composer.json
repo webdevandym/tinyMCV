@@ -1,0 +1,15 @@
+{
+  "require": {
+    "vlucas/phpdotenv": "^2.4"
+  },
+  "optimize-autoloader": true
+
+}
+
+
+/*
+"autoload": {
+  "psr-4": {
+    "app\\": "./app/"
+  }
+}*/

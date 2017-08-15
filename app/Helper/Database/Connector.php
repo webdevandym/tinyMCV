@@ -49,7 +49,11 @@ class Connector
                 $pass = $crypt->encrypt_decrypt('decrypt', $pass);
             }
 
-            $this->db = $this->getConnection($xml->dbhost->item, $xml->dbname->item, $xml->dbuser->item, $pass);
+            $dbhost = getenv('SQL_SERVER');
+            $dbname = getenv('SQL_DATABASE');
+            $dbuser = getenv('SQL_LOGIN');
+
+            $this->db = $this->getConnection($dbhost, $dbname, $dbuser, $pass);
         }
 
         return static::$instance;

@@ -61,4 +61,4 @@ requireDATA.prototype = {
 
 var HttpRequest = new requireDATA();
 
-log('STATUS: Setup install ...')
+log('STATUS: Setup config complete ...')
