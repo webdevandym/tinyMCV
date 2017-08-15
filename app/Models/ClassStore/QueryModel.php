@@ -116,7 +116,7 @@ abstract class QueryModel extends Model
                 if (is_array($value) || is_object($value)) {
                     $this->changeCharSet($value);
                 } else {
-                    if (is_object($value)) {
+                    if (is_object($val)) {
                         $val->$key = mb_convert_encoding($val->$key, $out, $in);
                     } else {
                         $val[$key] = mb_convert_encoding($val[$key], $out, $in);
