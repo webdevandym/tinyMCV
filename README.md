@@ -12,6 +12,13 @@ Pre Stable Version 3.0.01 prototype build 40
 
 Change Log:  
 
+3x0.05 prototype build 43
+>Composer loader integrate  
+>Add `.env` config file  
+>In `config.xml` left only pass and crypt kyes  
+>Full migrate Query
+***
+
 3x0.01 prototype build 40
 >New core  
 >Hello MCV  
