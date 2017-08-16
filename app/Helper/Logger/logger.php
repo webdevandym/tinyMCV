@@ -22,6 +22,10 @@ abstract class logger
 
     public function __construct($file, $context, $way, $templ, $timeZone, $maxsize = 50, $levelclass = 1, $levelmethod = 1)
     {
+        if (!getenv('DEBUG_LOG')) {
+            exit;
+        }
+
         $this->file = $file;
         $this->way = $way;
         $this->templ = $templ;
@@ -29,7 +33,7 @@ abstract class logger
         $this->maxsize = $maxsize;
         $this->levelclass = $levelclass;
         $this->levelmethod = $levelmethod;
-        date_default_timezone_set($timeZone ? $timeZone : getenv('CUR_LOCATION'));
+        date_default_timezone_set($timeZone ? $timeZone : (getenv('CUR_LOCATION') ? getenv('CUR_LOCATION') : 'UTC'));
     }
 
     abstract public function writeLog();

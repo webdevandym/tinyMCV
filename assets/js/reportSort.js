@@ -133,7 +133,8 @@ Object.prototype.highlightRowTable = function (colName) {
     allID = [],
     result = {},
     summH = [],
-    alltime = 0;
+    alltime = 0,
+    OverTime;
 
   $(this).find(colName).each(function (index, element) {
     if (colName == 'name') allVal.push($(this).children('span').text() + $(this).html().split('<br>')[0])
@@ -159,11 +160,13 @@ Object.prototype.highlightRowTable = function (colName) {
     if (colName == 'td.dateJob') {
       let sumChar = "position: absolute;text-shadow:0px 1px 1px white;color:grey;font-size:14px;margin-top:30px;margin-left:10px;content: '" + summH[index] + " h';font-family: FontAwesome;font-style: normal;font-weight: bold;text-decoration: inherit;"
       $('<style>#' + value + ':after{' + sumChar + '}</style>').appendTo('head');
+
+      OverTime = (OverTime || 0) + parseFloat(summH[index]) + (([0, 6].indexOf(new Date(index).getDay()) != -1) ? 0 : -8);
     }
   });
 
-  let alltimeChar = alltime > 40 ? (alltime + ' h (OverTime: ' + (alltime - 40) + ' h)') : alltime + " h",
-    tableOffset = $('#tableReport tbody').offset().left + $('#tableReport tbody').outerWidth() - (alltime > 40 ? 230 : 120),
+  let alltimeChar = OverTime > 0 ? (alltime + ' h (OverTime: ' + OverTime + ' h)') : alltime + " h",
+    tableOffset = $('#tableReport tbody').offset().left + $('#tableReport tbody').outerWidth() - (OverTime > 0 ? 230 : 120),
     allHStyle = "position: absolute;text-shadow:0px 1px 1px white;color:grey;font-size:14px;margin-top:5px;left:" + tableOffset + "px;content:'Total hours: " + alltimeChar + "';font-family: FontAwesome;font-style: normal;font-weight: bold;text-decoration: inherit;";
 
 

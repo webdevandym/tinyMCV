@@ -1,14 +1,14 @@
 function CalendarTable(aDate, weekdays) {
-  this.getLastDayMonth = function() {
+  this.getLastDayMonth = function () {
     var end = new Date(aDate.getFullYear(), aDate.getMonth() + 1, 0);
     return end.getDate();
   };
-  this.getStartWeekday = function() {
+  this.getStartWeekday = function () {
     var start = new Date(aDate.getFullYear(), aDate.getMonth(), 1);
     var wd = start.getDay();
     return (wd === 0) ? 7 : wd;
   };
-  this.getDays = function() {
+  this.getDays = function () {
     var days = [];
     for (var i = 1; i <= this.getLastDayMonth(); i++) days.push(i);
     return days;
@@ -22,11 +22,11 @@ function CalendarTable(aDate, weekdays) {
         var end = new Date(aDate.getFullYear(), aDate.getMonth(), 0);
         let lastDay = end.getDate();
         td.innerHTML = lastDay - d;
-        td.setAttribute('data-month', aDate.getMonth())
+        td.setAttribute('data-month', aDate.getMonth() || 12)
         td.setAttribute('month', 'previous')
       } else {
         td.innerHTML = d;
-        td.setAttribute('data-month', aDate.getMonth() + 2)
+        td.setAttribute('data-month', aDate.getMonth() != 11 ? aDate.getMonth() + 2 : 1)
         td.setAttribute('month', 'next')
       }
 
@@ -40,13 +40,13 @@ function CalendarTable(aDate, weekdays) {
 
   var today = aDate;
 
-  function fillTD(td, day) {
+  function fillTD(td, day, noFillToday = false) {
     td.innerHTML = day;
-    if (aDate.getFullYear() == today.getFullYear() && aDate.getMonth() == today.getMonth() && day == today.getDate()) {
+    if (aDate.getFullYear() == today.getFullYear() && aDate.getMonth() == today.getMonth() && day == today.getDate() && !noFillToday) {
       td.className = 'today';
     }
   }
-  this.getTable = function() {
+  this.getTable = function (fillToday) {
     var table = document.createElement('table');
     table.id = 'table-c';
     table.className = 'table table-bordered text-center';
@@ -67,7 +67,7 @@ function CalendarTable(aDate, weekdays) {
       if (i < getStartWeekday) {
         emptyTD(td, -i + getStartWeekday - 1, [], tr.getAttribute('class'), false);
       } else {
-        fillTD(td, days.shift());
+        fillTD(td, days.shift(), fillToday);
       }
       tr.appendChild(td);
     }
@@ -82,7 +82,7 @@ function CalendarTable(aDate, weekdays) {
       for (i = 0; i < 7; i++) {
         td = document.createElement('td');
         if (days.length > 0) {
-          fillTD(td, days.shift());
+          fillTD(td, days.shift(), fillToday);
         } else {
           emptyTD(td, j++, days, tr.getAttribute('class'), true);
         }
@@ -90,6 +90,7 @@ function CalendarTable(aDate, weekdays) {
       }
       table.appendChild(tr);
     }
+
     return table;
   };
 
@@ -183,7 +184,7 @@ function Calendar(date) {
 
   function switchCalendar(next) {
 
-    $('#table-c td').off()
+
 
     var container = document.getElementById('calendar-box');
     var year = Number(container.getAttribute('data-year'));
@@ -194,11 +195,12 @@ function Calendar(date) {
     container.setAttribute('data-month', nDate.getMonth());
     var oC = document.getElementById('table-c');
     var c_table = new CalendarTable(nDate, weekdays);
-    container.replaceChild(c_table.getTable(), oC);
+    container.replaceChild(c_table.getTable(true), oC);
     var title = document.getElementById('c-title');
     title.innerHTML = getLocalYearMonth(nDate);
 
-    getDateForDB(nDate, todayReruner);
+    getDateForDB(nDate, todayReruner, true);
+    monthTotalTime();
   }
 
   function getNextCalendar() {
@@ -221,6 +223,7 @@ function renderCalendar(date, func) {
     document.getElementById('calendar').appendChild(calendar);
   }
 
+  monthTotalTime();
   getDateForDB(date);
   if (typeof func == 'function') {
     func.call();

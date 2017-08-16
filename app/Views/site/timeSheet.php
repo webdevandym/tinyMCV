@@ -102,6 +102,9 @@ $modal = messStore::genLinks(['e' => 'modalEdit', 'd' => 'modalDel'], __ROOT__.'
                 <button class='btn btn-success' id="exportTS" disabled><i class="fa fa-table" aria-hidden="true"></i> Export To Excel</button>
             </div>
         </section>
+        <div id ='totalHoursofMoth'>
+
+        </div>
         <section id="ReportWeek">
 
         </section>

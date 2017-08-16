@@ -96,7 +96,10 @@ function insertData(object) {
           $("select#jobType_m option:contains(\'" + select.replace(/^ | $/, '') + "\')").attr('selected', true);
 
           $("#customer").change(function () {
-            $('#name').getPjName($('select#customer option:selected').val(), 1)
+            defferedQuery('customer', () => {
+              $('#name').getPjName($('select#customer option:selected').val(), 1)
+            })
+
           });
 
         })
@@ -108,10 +111,12 @@ function insertData(object) {
           for (let i = 0; i < ProjectItems.length; i++) {
 
             $(ProjectItems[i]).change(function () {
-              getObjName(false, "#objNameTS_m", {
-                name: $('#name option:selected').val(),
-                type: $('#objectType_m option:selected').val()
-              });
+              defferedQuery(ProjectItems[i].substr(1), () => {
+                getObjName(false, "#objNameTS_m", {
+                  name: $('#name option:selected').val(),
+                  type: $('#objectType_m option:selected').val()
+                })
+              }, 100)
             })
           }
 
@@ -243,6 +248,7 @@ ReportEditTool.prototype = {
               showSQLError(data);
             }).done(function () {
               returnReportFromDB(returnDate())
+              monthTotalTime();
             })
           })
           .wait(300, () => {
@@ -298,6 +304,7 @@ ReportEditTool.prototype = {
         .done(() => {
           _this.wait(200, function () {
             returnReportFromDB(returnDate());
+            monthTotalTime();
           })
         })
 

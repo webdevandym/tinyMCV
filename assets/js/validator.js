@@ -27,7 +27,7 @@ function hoursChecker(flag, object, e) {
   if (flag == 1) {
     return $(object).val($(object).val().replace(/^(?![1-9]+)0*\.+/, '0.'));
   } else {
-    return e.charCode >= 48 && e.charCode <= 57 || [46, 44].indexOf(e.charCode) > -1;
+    return (e.charCode > 45 && e.charCode < 58) || e.charCode < 32;
   }
 }
 
@@ -131,7 +131,9 @@ Object.prototype.watchFromJobType = function (checkValue, specRun) {
 
   if (firstCorrectingRun(this, s)) {
     $(clThis).change(function () {
-      switchSlectBlock(clThis);
+      defferedQuery('WatchForJob', () => {
+        switchSlectBlock(clThis);
+      }, 100)
     })
   }
 
@@ -249,6 +251,7 @@ insertNewReport.prototype = {
       })
       .done(function () {
         returnReportFromDB(userName, startOfWeek, endOfWeek)
+        monthTotalTime();
       })
 
     // $.get(paths.reportEditor + 'addReport&object=' + this.insertVal.parsetoJSON(), function (data) {

@@ -15,15 +15,14 @@ var putData = function (clb) {
 
       for (let i = 0; i < ProjectItems.length; i++) {
 
-        $(ProjectItems[i])
-          .change(function () {
+        $(ProjectItems[i]).change(function () {
+          defferedQuery(ProjectItems[i].substr(1), () => {
             getObjName()
-          })
+          }, 200)
+        })
       };
 
-      $('#projectID')
-        .getPjName(document.getElementById("customerID")
-          .value)
+      $('#projectID').getPjName(document.getElementById("customerID").value)
     })
 
 
@@ -98,38 +97,38 @@ let getData4JSON = function (data) {
 Object.prototype.getPjName = function (name, editor) {
 
   let _this = this;
+  defferedQuery('getPjName', () => {
+    HttpRequest.runQuery(paths.get, {
+        method: 'getProject',
+        data: {
+          query: name
+        }
+      }, (data) => {
 
-  HttpRequest.runQuery(paths.get, {
-      method: 'getProject',
-      data: {
-        query: name
-      }
-    }, (data) => {
+        $(_this)
+          .html(data);
+      })
+      .done(function () {
 
-      $(_this)
-        .html(data);
-    })
-    .done(function () {
+        if (document.getElementById('jobType')) {
+          let transfVal = 0,
+            obj = 0;
 
-      if (document.getElementById('jobType')) {
-        let transfVal = 0,
-          obj = 0;
+          if (editor) {
+            transfVal = trval || {
+                name: $('#name option:selected')
+                  .val(),
+                type: $('#objectType_m option:selected')
+                  .val()
+              },
+              obj = "#objNameTS_m";
+          };
+          getObjName(0, obj, transfVal)
+          firstRun = false;
+        }
+      })
 
-        if (editor) {
-          transfVal = trval || {
-              name: $('#name option:selected')
-                .val(),
-              type: $('#objectType_m option:selected')
-                .val()
-            },
-            obj = "#objNameTS_m";
-        };
-        getObjName(0, obj, transfVal)
-        firstRun = false;
-      }
-    })
-
-
+  }, 150);
 }
 
 

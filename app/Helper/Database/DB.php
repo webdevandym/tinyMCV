@@ -29,23 +29,7 @@ class DB extends Connector
             echo $e->getMessage();
         }
 
-        $flink = $this->logPath.'query.html';
-        $templFile = $this->logPath.'template.txt';
-
-        $query = htmlentities(preg_replace('/[\s\t\n]+/', ' ', $query));
-
-        $syntax = new colorSyntax('sql', $query);
-        $newquery = $syntax->clrSyntax();
-
-        $context = '<span>'.((!empty($result)) ? '<span class = "logSucc">success' : '<span class = "logFail">failure').' => </span>'.$newquery.((strlen($query) > 200) ? '...' : '').'</span>';
-
-        if ($shadow) {
-            $context = preg_replace('/(name|pass|password)[= \']+\S+\'/', '***', $context);
-            $level = 2;
-        }
-
-        $log = new logHTMLAdv($flink, $context, true, $templFile, getenv('CUR_LOCATION'));
-        $log->writeLog();
+        $this->log($query, $result, 'query.html');
 
         if (empty($result)) {
             die;
@@ -93,5 +77,23 @@ class DB extends Connector
         }
 
         return $rowCounter;
+    }
+
+    private function log($query, $res, $fileName, $templateName = 'template.txt')
+    {
+        $flink = $this->logPath.$fileName;
+        $templFile = $this->logPath.$templateName;
+
+        $query = htmlentities(preg_replace('/[\s\t\n]+/', ' ', $query));
+
+        $syntax = new colorSyntax('sql', $query);
+        $newquery = $syntax->clrSyntax();
+
+        $context = '<span>'.((!empty($res)) ? '<span class = "logSucc">success' : '<span class = "logFail">failure').' => </span>'.$newquery.((strlen($query) > 200) ? '...' : '').'</span>';
+
+        $context = preg_replace('/(name|pass|password)[= \']+\S+\'/', '***', $context);
+
+        $log = new logHTMLAdv($flink, $context, true, $templFile, getenv('CUR_LOCATION'));
+        $log->writeLog();
     }
 }

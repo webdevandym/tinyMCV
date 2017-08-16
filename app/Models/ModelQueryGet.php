@@ -233,4 +233,31 @@ _END;
 
         return reset($result)->maxdate;
     }
+
+    protected function getTotalHoursOfMonth($date)
+    {
+        $total = [];
+        $total['days'] = [];
+        $total['summ'] = $total['dayTotal'] = 0;
+        $sql = "SELECT job_hours as hours,job_date FROM proj_jobs WHERE user_id = {$date->user} and (job_date between CONVERT(DATETIME, '{$date->start}') and  CONVERT(DATETIME, '{$date->end}'))";
+        // $sql = "SELECT job_hours as hours FROM proj_jobs WHERE user_id = 68 and (job_date between CONVERT(DATETIME, '2017-08-01') and  CONVERT(DATETIME, '2017-08-29'))";
+        $result = $this->returnQuery($sql);
+        if (!isset($result[0]->hours)) {
+            return $total;
+        }
+
+        foreach ($result as  $row) {
+            $total['summ'] += $row->hours;
+            if (!array_key_exists($row->job_date, $total['days'])) {
+                $total['days'][$row->job_date] = 0;
+            }
+            $total['days'][$row->job_date] += $row->hours;
+        }
+
+        foreach ($total['days'] as $key => $value) {
+            $total['days'][$key] -= 8;
+        }
+
+        return $total;
+    }
 }

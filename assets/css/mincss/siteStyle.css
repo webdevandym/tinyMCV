@@ -889,6 +889,13 @@ tr .other {
 #table-nc .btn.btn-success {
   height: 32px; }
 
+#totalHoursofMoth {
+  padding: 15px 15px 0;
+  font-size: 15px;
+  height: 20px;
+  color: #2ea04d;
+  font-weight: bold; }
+
 /*!
  * Datepicker for Bootstrap v1.6.4 (https://github.com/eternicode/bootstrap-datepicker)
  *

@@ -28,7 +28,11 @@ var getCookie = (name) => {
         )
 
         $('#programmerName').change(function () {
-          getCurentReport($(this).val(), 'getCalendar')
+          let _this = this;
+          defferedQuery('programmerName', function () {
+            getCurentReport($(_this).val(), 'getCalendar')
+            monthTotalTime()
+          })
         })
       });
 

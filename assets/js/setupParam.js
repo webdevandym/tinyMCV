@@ -9,7 +9,8 @@ var paths = {
   logStatus = true,
   log = function (str) {
     if (logStatus) console.log(str);
-  };
+  },
+  runner = {};
 
 Object.prototype.parsetoJSON = function () {
   if (typeof this == 'object') {
@@ -22,7 +23,16 @@ Object.defineProperty(Object.prototype, 'parsetoJSON', {
   enumerable: false
 });
 
+function defferedQuery(queryName, f, wait = 200) {
 
+  clearTimeout(runner.queryName);
+
+  if (typeof f !== 'function') return;
+  runner.queryName = setTimeout(function () {
+    f();
+  }, wait);
+
+}
 
 function requireDATA() {
 
