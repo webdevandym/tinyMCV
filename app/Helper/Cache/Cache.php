@@ -2,6 +2,7 @@
 
 namespace app\Helper\Cache;
 
+use app\Helper\Logger\logHTMLAdv;
 use Memcache as Memcache;
 
 // use connector\fastConnect;
@@ -17,10 +18,11 @@ class Cache
 
     public static function get($key)
     {
-        self::initConn();
         try {
-            $res = self::$memcache->get(md5((string) $key));
+            self::initConn();
 
+            $res = self::$memcache->get(md5((string) $key));
+            self::log($key, $res);
             if (!empty($res)) {
                 return json_decode($res);
             }
@@ -39,8 +41,9 @@ class Cache
             return false;
         }
 
-        self::initConn();
         try {
+            self::initConn();
+
             self::$memcache->add(md5((string) $key), json_encode($res), 0, $time);
 
             self::close();
@@ -77,43 +80,11 @@ class Cache
         return self::$memcache->close();
     }
 
-    protected function log()
+    protected static function log($key, $res)
     {
-        $context = $key.(is_object($this::$memcache) && !empty($res) ? ' - success' : ' - run SQL query!').'<br>'.$res;
-        $log = new logHTMLAdv(__DIR__.'/../log/log.html', $context, false, __DIR__.'/../log/template.txt', 'Europe/Kiev');
+        $logPath = __ROOT__.'/Log/';
+        $context = $key.(is_object(self::$memcache) && !empty($res) ? ' - success' : ' - run SQL query!').'<br>'.$res;
+        $log = new logHTMLAdv($logPath.'cache.html', $context, false, $logPath.'template.txt');
         $log->writeLog();
     }
 }
-//
-//
-// class cached extends cachedInit
-// {
-//     public function getCacheSQL($key, $query)
-//     {
-//         $key = 'query'.$key;
-//         $c = $this->getCacheFromStore($key);
-//         if ($c) {
-//             return $c;
-//         }
-//
-//         $result = $this::$db->queryMysql($query);
-//         $r = $result->fetchAll(\PDO::FETCH_ASSOC);
-//
-//         return $this->setToCache($r);
-//     }
-//
-//     public function getJSONFileToCache($path, $lang)
-//     {
-//         preg_match('/[\w\d]+$/i', $path, $match);
-//         $key = 'json'.$match[0].$lang;
-//
-//         $c = $this->getCacheFromStore($key);
-//         if ($c) {
-//             return $c;
-//         }
-//
-//         $res = json_decode(file_get_contents($path.$lang.'.json'));
-//
-//         return $this->setToCache($res);
-//     }
-// }

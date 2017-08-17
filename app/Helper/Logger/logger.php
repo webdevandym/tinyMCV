@@ -20,7 +20,7 @@ abstract class logger
     protected $maxsize;
     protected $content;
 
-    public function __construct($file, $context, $way, $templ, $timeZone, $maxsize = 50, $levelclass = 1, $levelmethod = 1)
+    public function __construct($file, $context, $way, $templ, $timeZone = '', $maxsize = 50, $levelclass = 1, $levelmethod = 1)
     {
         if (!getenv('DEBUG_LOG')) {
             exit;

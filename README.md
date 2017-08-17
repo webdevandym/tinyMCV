@@ -7,15 +7,22 @@
 ║╚╝─║──║║────║║  
 ╚═══╝──╚╝────╚╝  
 
-Last UPD: 11.08.15 (13:01)  
-Pre Stable Version 3.0.01 prototype build 40
+Last UPD: 16.08.15 (17:43)  
+Pre Stable Version 3.0.06 prototype build 44
 
 Change Log:  
+3x0.06 prototype build 44
+>New functional  
+>Deffered query  
+>Fix many bugs  
+>Auto regenaration page content when changed.   
+>Fix canvas rendering in FF.  
+***
 
 3x0.05 prototype build 43
 >Composer loader integrate  
 >Add `.env` config file  
->In `config.xml` left only pass and crypt kyes  
+>In `config.xml` left only pass and crypt keys  
 >Full migrate Query
 ***
 

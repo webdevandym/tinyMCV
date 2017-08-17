@@ -4,7 +4,7 @@
         <span class="pull-left">CS QTT Panel <sup>&copy;</sup> by SAS Group</span>
         <span style="margin-left: 30px; float: left;" id = 'cngLog'><a href = 'https://docs.google.com/document/d/1Rbcx_aNae7Gzc_Y4v0i7TWoCjo4Vy43OvrvlSg7xL-I/edit?usp=sharing' target="_blank">>>> Add func</a></span>
         <span style="margin-left: 30px; float: right;" id = 'cngLog'><a href = 'https://github.com/webdevandym/tinyMCV/blob/beta/README.md' target="_blank">>>> Change Log</a></span>
-        <span class="pull-right">v 3 <span style = "font-size:14px;font-weight:bold;">x0.0.5</span> (prototype build 43)</span>
+        <span class="pull-right">v 3 <span style = "font-size:14px;font-weight:bold;">x0.0.6</span> (prototype build 44)</span>
     </div>
   </div>
 </footer>

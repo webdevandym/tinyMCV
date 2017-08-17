@@ -9,7 +9,6 @@ use app\Helper\Http\Render;
  *generate() return complex page
  *pageLoader() dynamic page switcher, best use with ajax.
  */
-
 class View
 {
     public function generate($contentView, $templateView, $data = null)
@@ -23,6 +22,7 @@ class View
     {
         //dynamic page render
         $rending = new Render($page);
+
         $page = $rending->getPage();
 
         return $page;

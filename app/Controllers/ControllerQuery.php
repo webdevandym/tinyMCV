@@ -23,8 +23,8 @@ class ControllerQuery extends Controller
 
     private function runner($location, Request $request)
     {
-        $modelNAme = '\app\Models\ModelQuery'.ucfirst(strtolower($location));
-        $this->model = new $modelNAme();
+        $modelName = '\app\Models\ModelQuery'.ucfirst(strtolower($location));
+        $this->model = new $modelName();
         $this->model->init($request);
         $res = $this->model->runVisiter();
 

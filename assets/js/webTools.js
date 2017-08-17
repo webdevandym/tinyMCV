@@ -111,7 +111,7 @@ var getCookie = (name) => {
     context.shadowOffsetY = 4;
     let color = '#2ea04d',
       marginTop = typeof InstallTrigger !== 'undefined' ? 20 : 15,
-      paddingLeft = typeof InstallTrigger !== 'undefined' ? 140 : 135;
+      paddingLeft = typeof InstallTrigger !== 'undefined' ? 150 : 135;
 
     let draw = () => {
       context.font = 'bold 15px "PT Sans"'

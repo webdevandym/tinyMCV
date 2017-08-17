@@ -8,6 +8,6 @@ class Controller404 extends Controller
 {
     public function actionIndex(\app\Helper\Http\Request $request)
     {
-        $this->view->generate('', '404.php');
+        $this->view->generate(null, '404.php');
     }
 }
