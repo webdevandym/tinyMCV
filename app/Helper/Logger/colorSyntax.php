@@ -2,6 +2,7 @@
 
 //set to constructor language to colored, and line of code;
 //if you have poor paint syntax, then modify syntax pattern!
+
 namespace app\Helper\Logger;
 
 class colorSyntax

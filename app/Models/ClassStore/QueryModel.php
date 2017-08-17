@@ -82,7 +82,7 @@ abstract class QueryModel extends Model
         try {
             return Cache::set($key, $timeCh, $c);
         } catch (\MemcachedException $e) {
-            return false;
+            return $c;
         }
     }
 

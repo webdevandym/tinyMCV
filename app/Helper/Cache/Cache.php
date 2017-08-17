@@ -10,18 +10,14 @@ use Memcache as Memcache;
 
 class Cache
 {
-    protected $valid;
-    protected $hash;
     private static $memcache = null;
-    private static $localhost = 'localhost';
-    private static $port = 11211;
 
     public static function get($key)
     {
         try {
             self::initConn();
 
-            $res = self::$memcache->get(md5((string) $key));
+            $res = self::$memcache->get(self::hash($key));
             self::log($key, $res);
             if (!empty($res)) {
                 return json_decode($res);
@@ -44,7 +40,7 @@ class Cache
         try {
             self::initConn();
 
-            self::$memcache->add(md5((string) $key), json_encode($res), 0, $time);
+            self::$memcache->add(self::hash($key), json_encode($res), 0, $time);
 
             self::close();
 
@@ -56,21 +52,25 @@ class Cache
 
     public static function has($key)
     {
-        return (bool) self::$memcache->get(md5((string) $key));
+        return (bool) self::$memcache->get(self::hash($key));
     }
 
     public static function delete($key, $time = 0)
     {
-        return self::$memcache->delete(md5((string) $key), $time);
+        return self::$memcache->delete(self::hash($key), $time);
     }
 
     protected static function initConn()
     {
-        if (self::$memcache === null) {
+        if (self::$memcache === null && class_exists('\Memcache')) {
             self::$memcache = new Memcache();
+
+            self::$memcache->connect(getenv('MEMCACHE_HOST') !== null ? getenv('MEMCACHE_HOST') : 'localhost', getenv('MEMCACHE_PORT') !== null ? getenv('MEMCACHE_PORT') : 11211) or die();
+
+            return;
         }
 
-        if (!self::$memcache->connect(self::$localhost, self::$port)) {
+        if (self::$memcache === null) {
             exit();
         }
     }
@@ -83,8 +83,15 @@ class Cache
     protected static function log($key, $res)
     {
         $logPath = __ROOT__.'/Log/';
+
         $context = $key.(is_object(self::$memcache) && !empty($res) ? ' - success' : ' - run SQL query!').'<br>'.$res;
+
         $log = new logHTMLAdv($logPath.'cache.html', $context, false, $logPath.'template.txt');
         $log->writeLog();
+    }
+
+    protected static function hash($key)
+    {
+        return md5((string) $key);
     }
 }

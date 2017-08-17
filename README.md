@@ -17,6 +17,8 @@ Change Log:
 >Fix many bugs  
 >Auto regenaration page content when changed.   
 >Fix canvas rendering in FF.  
+>ENV file, add new config  
+>Edit Cache class.
 ***
 
 3x0.05 prototype build 43
