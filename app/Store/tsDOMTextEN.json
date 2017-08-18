@@ -30,5 +30,14 @@
     "jtype": "<i class=\"fa fa-sticky-note\" aria-hidden=\"true\"></i>  Job Type",
     "jdate": "<i class=\"fa fa-calendar-o\" aria-hidden=\"true\"></i> Job Date",
     "jhour": "<i class=\"fa fa-clock-o\" aria-hidden=\"true\"></i> Job Hours"
+  },
+
+  "trackerTableHeader": {
+    "ND": "Not Done",
+    "DEF": "Define",
+    "RFQ": "Ready For QC",
+    "QCI": "QC Issues",
+    "QCD": "QC Done",
+    "QCNR": "QC Not Required"
   }
 }

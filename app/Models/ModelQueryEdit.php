@@ -12,6 +12,7 @@ class ModelQueryEdit extends QueryLauncher
 
     public function addReport($updval)
     {
+        throw new \Exception(print_r($updval));
         foreach ($updval as $value) {
             if ($value instanceof \stdClass) {
                 foreach ($value as $res) {

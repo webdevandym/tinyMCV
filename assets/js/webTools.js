@@ -21,18 +21,8 @@ var getCookie = (name) => {
       })
       .done(function () {
 
-        putData(
-          () => {
-            timeSheetRunEvent(page)
-          }
-        )
-
-        $('#programmerName').change(function () {
-          let _this = this;
-          defferedQuery('programmerName', function () {
-            getCurentReport($(_this).val(), 'getCalendar')
-            monthTotalTime()
-          })
+        putData(() => {
+          RunEvent(page)
         })
       });
 
@@ -42,9 +32,15 @@ var getCookie = (name) => {
     renderWeb(null, true);
   },
 
-  timeSheetRunEvent = (page) => {
+  trackerRunner = function () {
+    let track = new tracker();
+    console.log(1);
+    track.getData('.chooseSection');
+  },
 
-    if (!(page == 'timeSheet' || !page)) return;
+  RunEvent = (page) => {
+
+    if (!(page == 'timeSheet' || !page)) return trackerRunner();
 
     getCurentReport(getCookie('user'), '')
     renderCalendar()
@@ -60,7 +56,15 @@ var getCookie = (name) => {
     $('#jobType').watchFromJobType(['#objectType', '#objName'])
     extrafunc();
 
+    $('#programmerName').change(function () {
+      let _this = this;
+      defferedQuery('programmerName', function () {
+        getCurentReport($(_this).val(), 'getCalendar')
+        monthTotalTime()
+      })
+    })
   },
+
 
   printWeekDate = (st, end, width, notoday) => {
     if (!st || !end) throw "Start or End date of week incorect. Please check! Functuion printWeekDate()";

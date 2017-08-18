@@ -30,11 +30,7 @@ class Request
     private function clearString($str)
     {
         if (is_string($str)) {
-            if (preg_match('@^[a-zA-Z0-9%+-_]*$@', $str)) {
-                $str = rawurldecode($str);
-            }
-
-            return stripslashes(htmlentities(strip_tags($str)));
+            return stripslashes(htmlentities(strip_tags(rawurldecode($str))));
         }
         throw new \Exception(print_r($str));
     }

@@ -87,6 +87,9 @@ class ModelQueryGet extends QueryLauncher
         }
 
         asort($a);
+        if ($this->chkProp($val, 'page') === 'content') {
+            array_unshift($a, "<option value = '0'>All</option>");
+        }
 
         return $a;
     }
@@ -259,5 +262,9 @@ _END;
         }
 
         return $total;
+    }
+
+    protected function getStartTable($data)
+    {
     }
 }

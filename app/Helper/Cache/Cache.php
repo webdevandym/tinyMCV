@@ -62,7 +62,7 @@ class Cache
 
     protected static function initConn()
     {
-        if (self::$memcache === null && class_exists('\Memcache')) {
+        if (self::$memcache === null && class_exists('Memcache')) {
             self::$memcache = new Memcache();
 
             self::$memcache->connect(getenv('MEMCACHE_HOST') !== null ? getenv('MEMCACHE_HOST') : 'localhost', getenv('MEMCACHE_PORT') !== null ? getenv('MEMCACHE_PORT') : 11211) or die();

@@ -43,7 +43,10 @@ var putData = function (clb) {
       },
       getObjectType: {
         method: 'getObjectType',
-        id: "objectType"
+        id: "objectType",
+        data: {
+          page: $('meta[name="curentPage"]').attr('value')
+        }
       }
     }, function (data) {
       getData4JSON(data);
@@ -105,8 +108,7 @@ Object.prototype.getPjName = function (name, editor) {
         }
       }, (data) => {
 
-        $(_this)
-          .html(data);
+        $(_this).html(data);
       })
       .done(function () {
 

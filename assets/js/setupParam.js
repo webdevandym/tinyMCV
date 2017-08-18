@@ -43,7 +43,7 @@ requireDATA.prototype = {
 
     var json = $.parseJSON(JSON.stringify(obj));
     var _this = this;
-    // console.log(json);
+    console.log(json);
     return $.ajax({
       type: "POST",
       url: url,
